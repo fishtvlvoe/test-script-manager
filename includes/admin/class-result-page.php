@@ -34,25 +34,30 @@ class Result_Page {
 	 * Registers the standalone page endpoint.
 	 */
 	public static function init() {
-		add_action( 'admin_init', array( __CLASS__, 'handle_result_page' ) );
+		add_action( 'admin_menu', array( __CLASS__, 'register_result_page' ) );
+		add_action( 'load-admin_page_tsm-result', array( __CLASS__, 'handle_result_page' ) );
 	}
 
 	/**
-	 * Handle the result page request.
-	 *
-	 * Triggered via admin.php?page=tsm-result&execution_id=X
+	 * Register the result page in admin menu (hidden).
 	 */
-	public static function handle_result_page() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( ! isset( $_GET['page'] ) || 'tsm-result' !== $_GET['page'] ) {
-			return;
-		}
+	public static function register_result_page() {
+		add_submenu_page(
+			null, // No parent = hidden from menu.
+			__( 'Execution Result', 'test-script-manager' ),
+			__( 'Execution Result', 'test-script-manager' ),
+			'manage_options',
+			'tsm-result',
+			array( __CLASS__, 'render_result_page' )
+		);
+	}
 
-		// Security check.
-		if ( ! Security::check_admin_permission() ) {
-			wp_die( esc_html__( 'Unauthorized access.', 'test-script-manager' ) );
-		}
-
+	/**
+	 * Render the result page.
+	 *
+	 * Called by WordPress when tsm-result page is accessed.
+	 */
+	public static function render_result_page() {
 		// Get execution ID.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$execution_id = isset( $_GET['execution_id'] ) ? absint( $_GET['execution_id'] ) : 0;
@@ -75,6 +80,15 @@ class Result_Page {
 		// Render the page.
 		self::render( $execution, $script );
 		exit;
+	}
+
+	/**
+	 * Handle the result page request (for hook compatibility).
+	 *
+	 * @deprecated Use render_result_page() instead.
+	 */
+	public static function handle_result_page() {
+		self::render_result_page();
 	}
 
 	/**
