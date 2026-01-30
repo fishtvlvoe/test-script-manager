@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Security Foundation** - Database schema, authentication layer, path resolution
 - [x] **Phase 2: Script CRUD & Storage** - Script service, REST API endpoints, basic admin UI
-- [ ] **Phase 3: Monaco Editor Integration** - VS Code-quality code editor with multi-language support
+- [x] **Phase 3: Monaco Editor Integration** - VS Code-quality code editor with multi-language support
 - [ ] **Phase 4: Execution Engine** - Script execution with output capture, formatting, and stats
 - [ ] **Phase 5: Background Execution** - Action Scheduler integration for long-running scripts
 - [ ] **Phase 6: Version History** - Snapshot creation, diff view, rollback functionality
@@ -83,12 +83,12 @@ Plans:
   4. Database query results are displayed as formatted tables
   5. JSON/array data can be expanded/collapsed like Chrome DevTools
   6. Execution time and memory usage are shown after each run
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 04-01: Execution service with output buffering
-- [ ] 04-02: Execution REST API and history
-- [ ] 04-03: Output panel UI (tables, JSON viewer, stats)
+- [ ] 04-01-PLAN.md - ExecutionService with tri-layer error capture and output buffering
+- [ ] 04-02-PLAN.md - Execution REST API endpoints and history management
+- [ ] 04-03-PLAN.md - Result page UI with tables, JSON viewer, and stats display
 
 ### Phase 5: Background Execution
 **Goal**: Long-running scripts can execute in background without browser timeout
@@ -149,7 +149,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 1. Security Foundation | 2/2 | Complete | 2026-01-30 |
 | 2. Script CRUD & Storage | 3/3 | Complete | 2026-01-30 |
 | 3. Monaco Editor Integration | 3/3 | Complete | 2026-01-30 |
-| 4. Execution Engine | 0/3 | Not started | - |
+| 4. Execution Engine | 0/3 | Planned | - |
 | 5. Background Execution | 0/2 | Not started | - |
 | 6. Version History | 0/2 | Not started | - |
 | 7. Output Enhancements & Polish | 0/3 | Not started | - |
