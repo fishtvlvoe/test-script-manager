@@ -5,34 +5,35 @@
 See: .planning/PROJECT.md (updated 2026-01-30)
 
 **Core value:** 讓開發者能在 WordPress 後台一鍵編寫並執行測試腳本，立即看到格式化的結果，無需離開瀏覽器或處理檔案路徑問題
-**Current focus:** Phase 2 - Script CRUD Storage (COMPLETE)
+**Current focus:** Phase 3 - Monaco Editor Integration (In Progress)
 
 ## Current Position
 
-Phase: 2 of 7 (Script CRUD Storage) - COMPLETE
-Plan: 2 of 2 in current phase - COMPLETE
-Status: Phase complete, ready for Phase 3
-Last activity: 2026-01-30 — Completed 02-02-PLAN.md (Scripts REST API endpoints)
+Phase: 3 of 7 (Monaco Editor Integration) - IN PROGRESS
+Plan: 1 of 3 in current phase - COMPLETE
+Status: 03-01 complete, ready for 03-02 (auto-save and shortcuts)
+Last activity: 2026-01-30 — Completed 03-01-PLAN.md (Monaco CDN loading)
 
-Progress: [████░░░░░░] 29%
+Progress: [█████░░░░░] 40%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
-- Average duration: 7 min
-- Total execution time: 26 min
+- Total plans completed: 6
+- Average duration: 12.3 min
+- Total execution time: 74 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 01-security-foundation | 2 | 12 min | 6 min |
-| 02-script-crud-storage | 2 | 14 min | 7 min |
+| 02-script-crud-storage | 3 | 47 min | 16 min |
+| 03-monaco-editor-integration | 1 | 15 min | 15 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (5 min), 01-02 (7 min), 02-01 (8 min), 02-02 (6 min)
-- Trend: Stable
+- Last 5 plans: 02-01 (8 min), 02-02 (6 min), 02-03 (33 min), 03-01 (15 min)
+- Trend: 03-01 returned to normal pace
 
 *Updated after each plan completion*
 
@@ -57,9 +58,15 @@ Recent decisions affecting current work:
 | File header with wp-load.php | 02-01 | Scripts execute with full WordPress environment |
 | Rollback on file failure | 02-01 | Maintain data consistency, prevent orphan records |
 | Array callback for permission_callback | 02-02 | WordPress standard pattern for class methods |
+| jQuery for AJAX handling | 02-03 | WordPress core includes jQuery, no extra dependencies |
+| Client-side search implementation | 02-03 | Fast response, reduces server requests |
+| Auto-slug generation from name | 02-03 | Reduces user input, ensures correct format |
+| Monaco Editor v0.55.1 via CDN | 03-01 | Latest stable, jsDelivr for reliability |
+| AMD loader pattern for Monaco | 03-01 | WordPress compatibility, avoid ESM issues |
+| vs-dark theme default | 03-01 | Developer-friendly dark theme |
+| isLoadingScript flag | 03-01 | Prevent auto-save trigger during setValue() |
 
 Pending:
-- Monaco Editor via CDN vs Webpack
 - Action Scheduler for background jobs
 
 ### Pending Todos
@@ -70,14 +77,19 @@ None.
 
 From research:
 - ~~Symlink path resolution must be solved in Phase 1~~ **RESOLVED in 01-01** - TSM_PLUGIN_DIR works correctly
-- Monaco Editor bundle size (>2MB) requires lazy loading
+- ~~Monaco Editor bundle size (>2MB) requires lazy loading~~ **RESOLVED in 03-01** - CDN loading with AMD loader
 - Action Scheduler may conflict with FluentCart's bundled version
 
 ## Session Continuity
 
-Last session: 2026-01-30 14:45 (UTC+8)
-Stopped at: Completed 02-02-PLAN.md
+Last session: 2026-01-30 18:06 (UTC+8)
+Stopped at: Completed 03-01-PLAN.md (Monaco CDN loading)
 Resume file: None
 
+**Phase 3 進度:**
+- ✅ Monaco CDN 載入 (03-01)
+- ⬜ Auto-save 和快捷鍵 (03-02)
+- ⬜ Theme 切換和進階功能 (03-03)
+
 ---
-*Next step: Execute Phase 3 (Script Execution Engine)*
+*Next step: Execute 03-02-PLAN.md (Auto-save and keyboard shortcuts)*
