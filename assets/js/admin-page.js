@@ -172,6 +172,11 @@
 		$('#tsm-welcome').hide();
 		$('#tsm-create-form').show();
 		$('#tsm-script-name').focus();
+
+		// Initialize Monaco Editor if not already initialized
+		if (!createEditor) {
+			initMonacoEditor();
+		}
 	}
 
 	/**
