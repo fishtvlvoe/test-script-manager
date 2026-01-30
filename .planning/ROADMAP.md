@@ -32,11 +32,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Dangerous functions (eval, exec, system) are blocked when WP_DEBUG is false
   4. Database tables (tsm_scripts, tsm_script_versions, tsm_execution_logs, tsm_categories, tsm_script_tags) exist after plugin activation
   5. WordPress path resolution works correctly even with symlinked plugin directories
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 01-01: Database schema and plugin activation
-- [ ] 01-02: Security layer implementation
+- [ ] 01-01-PLAN.md - Plugin skeleton, database schema with dbDelta, activation hooks
+- [ ] 01-02-PLAN.md - Security layer (nonce/capability), code scanner, admin menu
 
 ### Phase 2: Script CRUD & Storage
 **Goal**: Users can create, read, update, and delete scripts through REST API and basic admin interface
@@ -146,7 +146,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Security Foundation | 0/2 | Not started | - |
+| 1. Security Foundation | 0/2 | Ready to execute | - |
 | 2. Script CRUD & Storage | 0/3 | Not started | - |
 | 3. Monaco Editor Integration | 0/3 | Not started | - |
 | 4. Execution Engine | 0/3 | Not started | - |
