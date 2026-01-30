@@ -13,7 +13,7 @@ This roadmap delivers a WordPress admin tool that lets developers write, manage,
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Security Foundation** - Database schema, authentication layer, path resolution
-- [ ] **Phase 2: Script CRUD & Storage** - Script service, REST API endpoints, basic admin UI
+- [x] **Phase 2: Script CRUD & Storage** - Script service, REST API endpoints, basic admin UI
 - [ ] **Phase 3: Monaco Editor Integration** - VS Code-quality code editor with multi-language support
 - [ ] **Phase 4: Execution Engine** - Script execution with output capture, formatting, and stats
 - [ ] **Phase 5: Background Execution** - Action Scheduler integration for long-running scripts
@@ -51,9 +51,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 02-01-PLAN.md - Script service and dual-write storage (ScriptService, StorageService)
-- [ ] 02-02-PLAN.md - Scripts REST API endpoints (Scripts_API with 5 endpoints)
-- [ ] 02-03-PLAN.md - Basic admin UI (script list, search, create form)
+- [x] 02-01-PLAN.md - Script service and dual-write storage (ScriptService, StorageService)
+- [x] 02-02-PLAN.md - Scripts REST API endpoints (Scripts_API with 5 endpoints)
+- [x] 02-03-PLAN.md - Basic admin UI (script list, search, create form)
 
 ### Phase 3: Monaco Editor Integration
 **Goal**: Users can edit scripts with VS Code-quality syntax highlighting and autocomplete
@@ -65,12 +65,12 @@ Plans:
   3. Changes are auto-saved after a brief delay (debounced)
   4. User can switch between dark and light editor themes
   5. Keyboard shortcuts work (Ctrl+S to save, Ctrl+Enter to execute)
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 03-01: Monaco Editor AMD loader integration
-- [ ] 03-02: Language support and WordPress autocomplete
-- [ ] 03-03: Auto-save and keyboard shortcuts
+- [ ] 03-01-PLAN.md - Monaco CDN loading and basic editor integration
+- [ ] 03-02-PLAN.md - WordPress autocomplete, auto-save, and keyboard shortcuts
+- [ ] 03-03-PLAN.md - Theme switching and final verification
 
 ### Phase 4: Execution Engine
 **Goal**: Users can execute scripts and see formatted output with error handling
@@ -147,8 +147,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Security Foundation | 2/2 | Complete | 2026-01-30 |
-| 2. Script CRUD & Storage | 0/3 | Ready for execution | - |
-| 3. Monaco Editor Integration | 0/3 | Not started | - |
+| 2. Script CRUD & Storage | 3/3 | Complete | 2026-01-30 |
+| 3. Monaco Editor Integration | 0/3 | Planned | - |
 | 4. Execution Engine | 0/3 | Not started | - |
 | 5. Background Execution | 0/2 | Not started | - |
 | 6. Version History | 0/2 | Not started | - |
