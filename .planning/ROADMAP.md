@@ -101,11 +101,12 @@ Plans:
   3. User receives notification (admin notice) when background execution completes
   4. User can check execution status (running, completed, failed) in execution history sidebar
   5. Failed background jobs are automatically retried up to 3 times
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 05-01: Action Scheduler integration
-- [ ] 05-02: Background execution status UI
+- [ ] 05-01-PLAN.md — Action Scheduler integration, database schema, BackgroundExecutionService
+- [ ] 05-02-PLAN.md — NotificationService (Admin Notice + Email), Background REST API
+- [ ] 05-03-PLAN.md — UI: Background Execute button, status icons, cancel functionality
 
 ### Phase 6: Version History
 **Goal**: Users can track script changes, compare versions, and rollback to previous states
@@ -150,8 +151,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 1. Security Foundation | 2/2 | Complete | 2026-01-30 |
 | 2. Script CRUD & Storage | 3/3 | Complete | 2026-01-30 |
 | 3. Monaco Editor Integration | 3/3 | Complete | 2026-01-30 |
-| 4. Execution Engine | 0/3 | Planned | - |
-| 5. Background Execution | 0/2 | Not started | - |
+| 4. Execution Engine | 4/4 | Complete | 2026-01-30 |
+| 5. Background Execution | 0/3 | Planned | - |
 | 6. Version History | 0/2 | Not started | - |
 | 7. Output Enhancements & Polish | 0/3 | Not started | - |
 
