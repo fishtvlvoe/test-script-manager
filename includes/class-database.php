@@ -29,8 +29,9 @@ class Database {
 	 * Version History:
 	 * - 1.0.0: Initial schema
 	 * - 1.1.0: Added background execution columns to tsm_execution_logs
+	 * - 1.2.0: Added created_by column to tsm_script_versions
 	 */
-	const DB_VERSION = '1.1.0';
+	const DB_VERSION = '1.2.0';
 
 	/**
 	 * Option key for storing database version.
@@ -140,9 +141,11 @@ class Database {
 			script_id bigint(20) UNSIGNED NOT NULL,
 			code longtext NOT NULL,
 			created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			created_by bigint(20) UNSIGNED DEFAULT NULL,
 			PRIMARY KEY  (id),
 			KEY script_id (script_id),
-			KEY created_at (created_at)
+			KEY created_at (created_at),
+			KEY created_by (created_by)
 		) $charset_collate;";
 
 		dbDelta( $sql );
