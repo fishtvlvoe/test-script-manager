@@ -77,9 +77,10 @@ class Plugin {
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-storage-service.php';
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-script-service.php';
 
-		// Execution services (Phase 4, Plan 01).
+		// Execution services (Phase 4, Plan 01 + Phase 5, Plan 01).
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-execution-service.php';
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-output-formatter.php';
+		require_once TSM_PLUGIN_DIR . 'includes/services/class-background-execution-service.php';
 
 		// API endpoints (Phase 2, Plan 02 + Phase 4, Plan 02).
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-scripts-api.php';
@@ -111,8 +112,9 @@ class Plugin {
 			Admin\Result_Page::init();
 		}
 
-		// Future hooks:
-		// - Frontend script enqueueing (Phase 5)
+		// Initialize background execution hooks (Phase 5, Plan 01).
+		// Register at init priority 20 to ensure Action Scheduler is ready.
+		add_action( 'init', array( 'TSM\Services\BackgroundExecutionService', 'init' ), 20 );
 	}
 
 	/**
