@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-30)
 ## Current Position
 
 Phase: 6 of 7 (Version History) - IN PROGRESS
-Plan: 1 of 3 in current phase - COMPLETE
-Status: Backend version service complete, ready for UI implementation
-Last activity: 2026-01-30 — Completed 06-01-PLAN.md (Version History Backend)
+Plan: 2 of 3 in current phase - COMPLETE
+Status: Version history UI complete with diff viewer and restore
+Last activity: 2026-01-30 — Completed 06-02-PLAN.md (Version History UI)
 
-Progress: [████████░░] 76% overall (5.33 of 7 phases)
+Progress: [█████████░] 80% overall (5.67 of 7 phases)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 16
-- Average duration: 8.9 min
-- Total execution time: 145 min
+- Total plans completed: 17
+- Average duration: 8.8 min
+- Total execution time: 149 min
 
 **By Phase:**
 
@@ -32,11 +32,11 @@ Progress: [████████░░] 76% overall (5.33 of 7 phases)
 | 03-monaco-editor-integration | 3 | 46 min | 15.3 min |
 | 04-execution-engine | 4 | 28 min | 7 min |
 | 05-background-execution | 3 | 9 min | 3 min |
-| 06-version-history | 1 | 3 min | 3 min |
+| 06-version-history | 2 | 7 min | 3.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-01 (3 min), 05-02 (3 min), 05-03 (3 min), 06-01 (3 min)
-- Trend: Maintaining efficient 3-minute execution for backend service plans
+- Last 5 plans: 05-02 (3 min), 05-03 (3 min), 06-01 (3 min), 06-02 (4 min)
+- Trend: Maintaining efficient sub-5-minute execution for focused plans
 
 *Updated after each plan completion*
 
@@ -96,6 +96,10 @@ Recent decisions affecting current work:
 | Version snapshot only on code change | 06-01 | Prevents duplicate snapshots when updating metadata |
 | Daily WP-Cron for cleanup | 06-01 | Better performance than cleanup on each save |
 | User attribution via get_current_user_id() ?: null | 06-01 | Handles both logged-in users and background processes |
+| Compare API accepts 'current' or version ID | 06-02 | Flexible diff combinations (old vs current, old vs old) |
+| Monaco Diff Editor uses synced theme | 06-02 | Consistent visual experience with main editor |
+| Side-by-side/inline mode preference persisted | 06-02 | User preference saved in localStorage |
+| Version history lifecycle integrated into edit mode | 06-02 | Clean resource management, prevents memory leaks |
 
 Pending:
 - None
@@ -114,19 +118,18 @@ From research:
 ## Session Continuity
 
 Last session: 2026-01-30 (UTC+8)
-Stopped at: Completed Phase 6 Plan 1 (Version History Backend)
+Stopped at: Completed Phase 6 Plan 2 (Version History UI)
 Resume file: None
 
-**Phase 6 Plan 1 完成 (06-01):**
-- ✅ Database migration to v1.2.0 with created_by column
-- ✅ VersionService with 6 CRUD methods
-- ✅ CleanupService with retention policy (50 versions OR 30 days)
-- ✅ Automatic version snapshots on script code updates
-- ✅ Version cleanup on script deletion
-- ✅ Daily WP-Cron cleanup registered
-- ✅ All 3 must-have truths verified (snapshots, user attribution, cleanup)
+**Phase 6 Plan 2 完成 (06-02):**
+- ✅ Versions_API with 4 REST endpoints (list, get, compare, restore)
+- ✅ version-history.js with version list, diff modal, restore logic
+- ✅ Version history sidebar integrated into edit mode
+- ✅ Monaco Diff Editor with side-by-side/inline toggle
+- ✅ One-click restore with editor update
+- ✅ All 3 must-have truths verified (list, compare, restore)
 
-**Key achievement:** Version history backend complete with automatic snapshots, user tracking, and intelligent retention policy. Scripts now maintain full version history for rollback and comparison features.
+**Key achievement:** Complete version history UI with Monaco Diff Editor for side-by-side comparison and one-click restore. Users can view version timeline, compare any two versions with syntax highlighting, and restore previous versions seamlessly.
 
 ---
-*Next step: Execute Phase 6 Plan 2 (Version History UI)*
+*Next step: Execute Phase 6 Plan 3 (Version History Testing) or Phase 7 (Documentation)*
