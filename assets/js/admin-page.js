@@ -14,6 +14,11 @@
 	let editEditor = null;
 	let currentEditId = null;
 	let isLoadingScript = false;
+	let currentScriptSlug = null;
+
+	// Auto-save configuration
+	var autoSaveTimeout = null;
+	var AUTOSAVE_DELAY = 3000; // 3 seconds
 
 	// Load scripts on page load
 	$(document).ready(function() {
@@ -335,6 +340,83 @@
 	}
 
 	/**
+	 * Schedule auto-save after debounce delay.
+	 */
+	function scheduleAutoSave() {
+		clearTimeout(autoSaveTimeout);
+		updateSaveIndicator('unsaved');
+
+		autoSaveTimeout = setTimeout(function() {
+			if (currentEditId) {
+				performAutoSave(currentEditId);
+			}
+		}, AUTOSAVE_DELAY);
+	}
+
+	/**
+	 * Perform auto-save via REST API.
+	 *
+	 * @param {number} scriptId Script ID to save.
+	 */
+	function performAutoSave(scriptId) {
+		if (!editEditor) return;
+
+		var content = editEditor.getValue();
+
+		$.ajax({
+			url: tsmAdmin.restUrl + '/scripts/' + scriptId,
+			method: 'PUT',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			contentType: 'application/json',
+			data: JSON.stringify({
+				code: content
+			}),
+			success: function(response) {
+				if (response.success) {
+					updateSaveIndicator('saved');
+					// Update local cache
+					var index = scripts.findIndex(function(s) { return s.id == scriptId; });
+					if (index !== -1) {
+						scripts[index].code = content;
+					}
+				} else {
+					updateSaveIndicator('error', response.error);
+				}
+			},
+			error: function(xhr) {
+				var message = xhr.responseJSON && xhr.responseJSON.error
+					? xhr.responseJSON.error
+					: 'Auto-save failed';
+				updateSaveIndicator('error', message);
+			}
+		});
+	}
+
+	/**
+	 * Update save indicator UI.
+	 *
+	 * @param {string} status Status: 'saved', 'unsaved', 'error'.
+	 * @param {string} message Optional error message.
+	 */
+	function updateSaveIndicator(status, message) {
+		var indicator = document.getElementById('tsm-save-indicator');
+		if (!indicator) return;
+
+		if (status === 'saved') {
+			indicator.textContent = 'Saved at ' + new Date().toLocaleTimeString();
+			indicator.className = 'tsm-save-indicator saved';
+		} else if (status === 'unsaved') {
+			indicator.textContent = 'Unsaved changes';
+			indicator.className = 'tsm-save-indicator unsaved';
+		} else if (status === 'error') {
+			indicator.textContent = 'Error: ' + (message || 'Save failed');
+			indicator.className = 'tsm-save-indicator error';
+		}
+	}
+
+	/**
 	 * Open edit mode for a script.
 	 *
 	 * @param {number} scriptId Script ID.
@@ -383,6 +465,9 @@
 			},
 			success: function(response) {
 				if (response.script) {
+					// Store script slug for execute function
+					currentScriptSlug = response.script.slug || null;
+					$('#tsm-current-script-slug').val(currentScriptSlug);
 					createOrUpdateEditEditor(response.script.code || '<?php\n');
 				}
 			},
@@ -443,6 +528,16 @@
 		});
 
 		if (editEditor) {
+			// Connect change event for auto-save
+			editEditor.onDidChangeModelContent(function(e) {
+				// Skip if loading content programmatically
+				if (isLoadingScript || e.isFlush) return;
+				scheduleAutoSave();
+			});
+
+			// Add keyboard shortcuts
+			addEditorShortcuts(editEditor);
+
 			console.log('TSM: Edit Monaco editor initialized');
 		}
 	}
@@ -451,11 +546,16 @@
 	 * Hide edit section and show welcome.
 	 */
 	function hideEditSection() {
+		// Cancel pending auto-save
+		clearTimeout(autoSaveTimeout);
+
 		$('#tsm-edit-section').hide();
 		$('#tsm-welcome').show();
 		$('#tsm-edit-message').hide();
+		$('#tsm-save-indicator').text('').removeClass('saved unsaved error');
 		$('.tsm-script-item').removeClass('active');
 		currentEditId = null;
+		currentScriptSlug = null;
 	}
 
 	/**

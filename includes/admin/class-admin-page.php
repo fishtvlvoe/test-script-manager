@@ -138,9 +138,10 @@ class Admin_Page {
 			'tsm-admin-page',
 			'tsmAdmin',
 			array(
-				'restUrl' => rest_url( 'test-script-manager/v1' ),
-				'nonce'   => wp_create_nonce( 'wp_rest' ),
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'restUrl'    => rest_url( 'test-script-manager/v1' ),
+				'nonce'      => wp_create_nonce( 'wp_rest' ),
+				'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
+				'scriptsUrl' => site_url( '/test-scripts/' ),
 			)
 		);
 	}
@@ -220,8 +221,10 @@ class Admin_Page {
 
 					<!-- Edit section (hidden by default) -->
 					<div class="tsm-edit-section" id="tsm-edit-section" style="display: none;">
+						<input type="hidden" id="tsm-current-script-slug" value="" />
 						<div class="tsm-edit-header">
 							<h2 id="tsm-edit-title"><?php esc_html_e( '編輯腳本', 'test-script-manager' ); ?></h2>
+							<span id="tsm-save-indicator" class="tsm-save-indicator"></span>
 							<button type="button" class="button" id="tsm-back-to-list">
 								<?php esc_html_e( '返回列表', 'test-script-manager' ); ?>
 							</button>
@@ -229,6 +232,13 @@ class Admin_Page {
 
 						<div class="tsm-form-group">
 							<label><?php esc_html_e( '程式碼', 'test-script-manager' ); ?></label>
+							<!-- Editor toolbar -->
+							<div class="tsm-editor-toolbar">
+								<button type="button" id="tsm-theme-toggle" class="button">
+									<span class="dashicons dashicons-visibility"></span>
+									<span id="tsm-theme-label">Light Theme</span>
+								</button>
+							</div>
 							<div id="monaco-editor-edit" class="tsm-monaco-editor"></div>
 							<input type="hidden" id="tsm-edit-script-id" />
 						</div>
