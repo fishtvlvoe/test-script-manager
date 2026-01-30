@@ -48,12 +48,12 @@ Plans:
   3. Script is saved to both database and filesystem ({WordPress root}/test-scripts/test-{slug}.php)
   4. User can access script file directly via browser URL
   5. User can search scripts by name or code content
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 02-01: Script service and dual-write storage
-- [ ] 02-02: Scripts REST API endpoints
-- [ ] 02-03: Basic admin UI (script list)
+- [ ] 02-01-PLAN.md - Script service and dual-write storage (ScriptService, StorageService)
+- [ ] 02-02-PLAN.md - Scripts REST API endpoints (Scripts_API with 5 endpoints)
+- [ ] 02-03-PLAN.md - Basic admin UI (script list, search, create form)
 
 ### Phase 3: Monaco Editor Integration
 **Goal**: Users can edit scripts with VS Code-quality syntax highlighting and autocomplete
@@ -147,7 +147,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Security Foundation | 2/2 | Complete | 2026-01-30 |
-| 2. Script CRUD & Storage | 0/3 | Not started | - |
+| 2. Script CRUD & Storage | 0/3 | Ready for execution | - |
 | 3. Monaco Editor Integration | 0/3 | Not started | - |
 | 4. Execution Engine | 0/3 | Not started | - |
 | 5. Background Execution | 0/2 | Not started | - |
