@@ -77,29 +77,31 @@ class Plugin {
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-storage-service.php';
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-script-service.php';
 
+		// API endpoints (Phase 2, Plan 02).
+		require_once TSM_PLUGIN_DIR . 'includes/api/class-scripts-api.php';
+
 		// Admin page (Phase 1, Plan 02).
 		require_once TSM_PLUGIN_DIR . 'includes/admin/class-admin-page.php';
-
-		// Future classes:
-		// - api/class-scripts-api.php (Phase 3)
 	}
 
 	/**
 	 * Register WordPress hooks.
 	 *
-	 * Initializes admin page and other components.
+	 * Initializes REST API, admin page, and other components.
 	 * Future phases will add:
-	 * - REST API initialization (Phase 3)
 	 * - Script enqueueing (Phase 5)
 	 */
 	private function register_hooks() {
+		// Register REST API routes.
+		$scripts_api = new API\Scripts_API();
+		add_action( 'rest_api_init', array( $scripts_api, 'register_routes' ) );
+
 		// Initialize admin page (only in admin context).
 		if ( is_admin() ) {
 			new Admin_Page();
 		}
 
 		// Future hooks:
-		// - REST API routes (Phase 3)
 		// - Frontend script enqueueing (Phase 5)
 	}
 
