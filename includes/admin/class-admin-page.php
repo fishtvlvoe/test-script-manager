@@ -81,11 +81,33 @@ class Admin_Page {
 			return;
 		}
 
-		// Placeholder for future CSS/JS assets.
-		// Phase 5 will add Monaco Editor and custom styles.
-		// Example:
-		// wp_enqueue_style( 'tsm-admin', TSM_PLUGIN_URL . 'assets/css/admin.css', array(), TSM_VERSION );
-		// wp_enqueue_script( 'tsm-admin', TSM_PLUGIN_URL . 'assets/js/admin.js', array(), TSM_VERSION, true );
+		// Enqueue CSS.
+		wp_enqueue_style(
+			'tsm-admin-page',
+			TSM_PLUGIN_URL . 'assets/css/admin-page.css',
+			array(),
+			TSM_VERSION
+		);
+
+		// Enqueue JS.
+		wp_enqueue_script(
+			'tsm-admin-page',
+			TSM_PLUGIN_URL . 'assets/js/admin-page.js',
+			array( 'jquery' ),
+			TSM_VERSION,
+			true
+		);
+
+		// Localize script with REST API data.
+		wp_localize_script(
+			'tsm-admin-page',
+			'tsmAdmin',
+			array(
+				'restUrl' => rest_url( 'test-script-manager/v1' ),
+				'nonce'   => wp_create_nonce( 'wp_rest' ),
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			)
+		);
 	}
 
 	/**
@@ -102,49 +124,68 @@ class Admin_Page {
 				array( 'response' => 403 )
 			);
 		}
-
-		// Get REST API nonce for future AJAX calls.
-		$rest_nonce = Security::get_rest_nonce();
-		$rest_url   = esc_url( rest_url( 'tsm/v1/' ) );
-
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( '測試腳本管理', 'test-script-manager' ); ?></h1>
+		<div class="wrap tsm-admin-page">
+			<h1>
+				<?php esc_html_e( '測試腳本管理', 'test-script-manager' ); ?>
+				<button type="button" class="page-title-action" id="tsm-new-script">
+					<?php esc_html_e( '新增腳本', 'test-script-manager' ); ?>
+				</button>
+			</h1>
 
-			<p><?php esc_html_e( '外掛安裝成功！後續 Phase 將加入腳本列表和編輯器。', 'test-script-manager' ); ?></p>
+			<div class="tsm-container">
+				<!-- Sidebar -->
+				<div class="tsm-sidebar">
+					<!-- Search box -->
+					<div class="tsm-search-box">
+						<input type="text" id="tsm-search" placeholder="<?php esc_attr_e( '搜尋腳本...', 'test-script-manager' ); ?>">
+					</div>
 
-			<div class="tsm-container" style="display: flex; gap: 20px; margin-top: 20px;">
-				<div class="tsm-sidebar" style="width: 250px; background: #fff; padding: 15px; border: 1px solid #ccd0d4;">
-					<h2><?php esc_html_e( '腳本列表', 'test-script-manager' ); ?></h2>
-					<p class="description"><?php esc_html_e( '（等待實作）', 'test-script-manager' ); ?></p>
+					<!-- Script list -->
+					<div class="tsm-script-list" id="tsm-script-list">
+						<div class="tsm-loading"><?php esc_html_e( '載入中...', 'test-script-manager' ); ?></div>
+					</div>
 				</div>
-				<div class="tsm-main" style="flex: 1; background: #fff; padding: 15px; border: 1px solid #ccd0d4;">
-					<h2><?php esc_html_e( '編輯器區', 'test-script-manager' ); ?></h2>
-					<p class="description"><?php esc_html_e( '（等待實作）', 'test-script-manager' ); ?></p>
 
-					<!-- Debug info (only visible in development) -->
-					<?php if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) : ?>
-					<hr style="margin: 20px 0;">
-					<h3><?php esc_html_e( '除錯資訊', 'test-script-manager' ); ?></h3>
-					<table class="widefat" style="max-width: 500px;">
-						<tr>
-							<td><strong>REST URL:</strong></td>
-							<td><code><?php echo esc_html( $rest_url ); ?></code></td>
-						</tr>
-						<tr>
-							<td><strong>REST Nonce:</strong></td>
-							<td><code><?php echo esc_html( $rest_nonce ); ?></code></td>
-						</tr>
-						<tr>
-							<td><strong>WP_DEBUG:</strong></td>
-							<td><?php echo WP_DEBUG ? 'true' : 'false'; ?></td>
-						</tr>
-						<tr>
-							<td><strong>TSM_VERSION:</strong></td>
-							<td><?php echo esc_html( TSM_VERSION ); ?></td>
-						</tr>
-					</table>
-					<?php endif; ?>
+				<!-- Main content -->
+				<div class="tsm-main-content">
+					<!-- Create form (hidden by default) -->
+					<div class="tsm-create-form" id="tsm-create-form" style="display: none;">
+						<h2><?php esc_html_e( '建立新腳本', 'test-script-manager' ); ?></h2>
+
+						<div class="tsm-form-group">
+							<label for="tsm-script-name"><?php esc_html_e( '腳本名稱', 'test-script-manager' ); ?></label>
+							<input type="text" id="tsm-script-name" required>
+						</div>
+
+						<div class="tsm-form-group">
+							<label for="tsm-script-slug"><?php esc_html_e( 'Slug', 'test-script-manager' ); ?></label>
+							<input type="text" id="tsm-script-slug" required>
+							<p class="description"><?php esc_html_e( '只能使用小寫字母、數字和連字號', 'test-script-manager' ); ?></p>
+						</div>
+
+						<div class="tsm-form-group">
+							<label for="tsm-script-code"><?php esc_html_e( '程式碼', 'test-script-manager' ); ?></label>
+							<textarea id="tsm-script-code" rows="10" required></textarea>
+						</div>
+
+						<div class="tsm-form-actions">
+							<button type="button" class="button button-primary" id="tsm-save-script">
+								<?php esc_html_e( '儲存腳本', 'test-script-manager' ); ?>
+							</button>
+							<button type="button" class="button" id="tsm-cancel-create">
+								<?php esc_html_e( '取消', 'test-script-manager' ); ?>
+							</button>
+						</div>
+
+						<div class="tsm-message" id="tsm-message" style="display: none;"></div>
+					</div>
+
+					<!-- Welcome message (shown by default) -->
+					<div class="tsm-welcome" id="tsm-welcome">
+						<h2><?php esc_html_e( '歡迎使用測試腳本管理', 'test-script-manager' ); ?></h2>
+						<p><?php esc_html_e( '從左側選擇腳本或建立新的腳本。', 'test-script-manager' ); ?></p>
+					</div>
 				</div>
 			</div>
 		</div>
