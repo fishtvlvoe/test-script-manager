@@ -20,7 +20,6 @@
 - [ ] **EDIT-02**: SQL 語法高亮和自動完成
 - [ ] **EDIT-03**: JavaScript 語法高亮和自動完成
 - [ ] **EDIT-04**: CSS 語法高亮和自動完成
-- [ ] **EDIT-05**: Vue.js 語法高亮支援
 - [ ] **EDIT-06**: 自動儲存功能（Auto-save）
 - [ ] **EDIT-07**: WordPress 函數和 Hooks 自動完成提示
 - [ ] **EDIT-08**: 主題切換功能（暗黑/明亮模式）
