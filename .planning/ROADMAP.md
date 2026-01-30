@@ -134,12 +134,12 @@ Plans:
   3. User can add multiple tags to scripts for filtering
   4. User can create scripts from template library (common patterns)
   5. User can configure timeout and IP whitelist in settings page
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 07-01: Export functionality (CSV, JSON, Excel)
-- [ ] 07-02: Categories, tags, and templates
-- [ ] 07-03: Settings page
+- [ ] 07-01-PLAN.md — Export functionality (ExportService, Export_API, result page buttons)
+- [ ] 07-02-PLAN.md — Settings page with IP whitelist and timeout configuration
+- [ ] 07-03-PLAN.md — Categories, tags, and template library
 
 ## Progress
 
@@ -154,8 +154,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 4. Execution Engine | 4/4 | Complete | 2026-01-30 |
 | 5. Background Execution | 3/3 | Complete | 2026-01-30 |
 | 6. Version History | 2/2 | Complete | 2026-01-30 |
-| 7. Output Enhancements & Polish | 0/3 | Not started | - |
+| 7. Output Enhancements & Polish | 0/3 | Planned | - |
 
 ---
 *Roadmap created: 2026-01-30*
-*Last updated: 2026-01-30 (Phase 6 completed)*
+*Last updated: 2026-01-30 (Phase 7 planned)*
