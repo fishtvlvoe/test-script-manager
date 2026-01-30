@@ -66,23 +66,37 @@ class Plugin {
 	 */
 	private function load_dependencies() {
 		// Database class is loaded in test-script-manager.php before activation hook.
-		// Additional class files will be loaded here in future phases:
-		// - class-security.php (Phase 1, Plan 02)
-		// - class-code-scanner.php (Phase 1, Plan 02)
+
+		// Security utilities (Phase 1, Plan 02).
+		require_once TSM_PLUGIN_DIR . 'includes/class-security.php';
+
+		// Code scanner for dangerous function detection (Phase 1, Plan 02).
+		require_once TSM_PLUGIN_DIR . 'includes/class-code-scanner.php';
+
+		// Admin page (Phase 1, Plan 02).
+		require_once TSM_PLUGIN_DIR . 'includes/admin/class-admin-page.php';
+
+		// Future classes:
 		// - api/class-scripts-api.php (Phase 3)
-		// - admin/class-admin-page.php (Phase 2)
 	}
 
 	/**
 	 * Register WordPress hooks.
 	 *
-	 * Currently empty. Hooks will be added in subsequent phases:
-	 * - Admin menu registration (Phase 2)
+	 * Initializes admin page and other components.
+	 * Future phases will add:
 	 * - REST API initialization (Phase 3)
 	 * - Script enqueueing (Phase 5)
 	 */
 	private function register_hooks() {
-		// Hooks will be registered here in future phases.
+		// Initialize admin page (only in admin context).
+		if ( is_admin() ) {
+			new Admin_Page();
+		}
+
+		// Future hooks:
+		// - REST API routes (Phase 3)
+		// - Frontend script enqueueing (Phase 5)
 	}
 
 	/**
