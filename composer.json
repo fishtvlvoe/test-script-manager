@@ -1,0 +1,12 @@
+{
+    "name": "fishtvlvoe/test-script-manager",
+    "description": "WordPress backend test script management tool",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "woocommerce/action-scheduler": "^3.9"
+    },
+    "config": {
+        "vendor-dir": "includes/libraries"
+    }
+}

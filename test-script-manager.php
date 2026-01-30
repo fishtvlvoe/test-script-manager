@@ -45,6 +45,17 @@ define( 'TSM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'TSM_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
 /**
+ * Load Action Scheduler EARLY (before plugins_loaded).
+ *
+ * Action Scheduler needs to initialize at plugins_loaded priority 0.
+ * We load the Composer autoloader here to ensure Action Scheduler
+ * is available before our plugin initializes at priority 20.
+ */
+if ( file_exists( TSM_PLUGIN_DIR . 'includes/libraries/autoload.php' ) ) {
+	require_once TSM_PLUGIN_DIR . 'includes/libraries/autoload.php';
+}
+
+/**
  * Load dependencies BEFORE registering activation hook.
  *
  * Important: Database class must be loaded first because activation hook
