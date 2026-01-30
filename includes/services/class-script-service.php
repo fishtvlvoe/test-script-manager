@@ -205,6 +205,13 @@ class ScriptService {
 
 		$old_slug = $existing['slug'];
 
+		// CREATE VERSION SNAPSHOT (Phase 6, Plan 01).
+		// Only create version if code is changing.
+		$new_code = isset( $data['code'] ) ? $data['code'] : $existing['code'];
+		if ( $new_code !== $existing['code'] ) {
+			VersionService::create_version( $id, $existing['code'] );
+		}
+
 		// Merge with existing data.
 		$name     = isset( $data['name'] ) ? sanitize_text_field( $data['name'] ) : $existing['name'];
 		$slug     = isset( $data['slug'] ) ? sanitize_title( $data['slug'] ) : $existing['slug'];
@@ -305,6 +312,9 @@ class ScriptService {
 
 		$slug       = $existing['slug'];
 		$table_name = Database::get_table_name( Database::TABLE_SCRIPTS );
+
+		// Delete all versions for this script (Phase 6, Plan 01).
+		VersionService::delete_all_versions( $id );
 
 		// Delete from database.
 		$result = $wpdb->delete(

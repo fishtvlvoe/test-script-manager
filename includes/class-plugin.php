@@ -83,6 +83,10 @@ class Plugin {
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-background-execution-service.php';
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-notification-service.php';
 
+		// Version services (Phase 6, Plan 01).
+		require_once TSM_PLUGIN_DIR . 'includes/services/class-version-service.php';
+		require_once TSM_PLUGIN_DIR . 'includes/services/class-cleanup-service.php';
+
 		// API endpoints (Phase 2, Plan 02 + Phase 4, Plan 02 + Phase 5, Plan 02).
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-scripts-api.php';
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-execution-api.php';
@@ -123,6 +127,9 @@ class Plugin {
 		// Initialize background execution hooks (Phase 5, Plan 01).
 		// Register at init priority 20 to ensure Action Scheduler is ready.
 		add_action( 'init', array( 'TSM\Services\BackgroundExecutionService', 'init' ), 20 );
+
+		// Register version cleanup cron (Phase 6, Plan 01).
+		Services\CleanupService::register_cron();
 	}
 
 	/**
