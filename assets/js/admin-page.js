@@ -64,10 +64,8 @@
 		// Update script
 		$('#tsm-update-script').on('click', updateScript);
 
-		// Execute script (placeholder for now)
-		$('#tsm-execute-script').on('click', function() {
-			showEditMessage('Execute feature coming in Phase 4', 'success');
-		});
+		// Execute script
+		$('#tsm-execute-script').on('click', executeCurrentScript);
 	}
 
 	/**
@@ -620,6 +618,64 @@
 		setTimeout(function() {
 			$message.fadeOut();
 		}, 3000);
+	}
+
+	/**
+	 * Add keyboard shortcuts to Monaco editor.
+	 *
+	 * @param {Object} editor Monaco editor instance.
+	 */
+	function addEditorShortcuts(editor) {
+		if (!editor || typeof monaco === 'undefined') return;
+
+		// Ctrl+S / Cmd+S - Save immediately
+		editor.addAction({
+			id: 'tsm-save-script',
+			label: 'Save Script',
+			keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
+			contextMenuGroupId: 'navigation',
+			contextMenuOrder: 1.5,
+			run: function() {
+				// Cancel pending auto-save
+				clearTimeout(autoSaveTimeout);
+				// Save immediately
+				if (currentEditId) {
+					performAutoSave(currentEditId);
+				}
+			}
+		});
+
+		// Ctrl+Enter / Cmd+Enter - Execute script
+		editor.addAction({
+			id: 'tsm-execute-script',
+			label: 'Execute Script',
+			keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter],
+			contextMenuGroupId: 'navigation',
+			contextMenuOrder: 1.6,
+			run: function() {
+				executeCurrentScript();
+			}
+		});
+	}
+
+	/**
+	 * Execute current script in new tab.
+	 */
+	function executeCurrentScript() {
+		if (!currentScriptSlug) {
+			showEditMessage('Script slug not available', 'error');
+			return;
+		}
+
+		// First, save any pending changes
+		clearTimeout(autoSaveTimeout);
+		if (currentEditId && editEditor) {
+			performAutoSave(currentEditId);
+		}
+
+		// Open script URL in new tab
+		var scriptUrl = tsmAdmin.scriptsUrl + 'test-' + currentScriptSlug + '.php';
+		window.open(scriptUrl, '_blank');
 	}
 
 })(jQuery);
