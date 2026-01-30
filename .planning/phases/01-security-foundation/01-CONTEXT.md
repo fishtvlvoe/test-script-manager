@@ -150,7 +150,22 @@
 <deferred>
 ## Deferred Ideas
 
-None — discussion stayed within phase scope
+**Deferred to Phase 4 (Execution Engine):**
+以下為執行相關的進階安全功能，需要有完整的執行引擎後才能實作：
+
+- **SEC-04 (Execution Timeout)**: 執行時間限制（可設定 timeout）
+  - 需要 Execution Service 存在才能實作 timeout 機制
+  - 預設 30 秒，可調整至 300 秒
+
+- **SEC-05 (IP Whitelist)**: 輸出大小限制 / IP 白名單
+  - 需要 Settings Page 存在才能配置
+  - 在 Phase 7 的 Settings Page 實作
+
+- **SEC-06 (Approval Workflow)**: 審批工作流程（如需要）
+  - 進階功能，視專案需求在後續 phase 決定是否實作
+  - 目前僅限單一管理員使用，暫不需要審批流程
+
+**理由：** Phase 1 專注於建立安全「基礎設施」（資料庫、認證、危險函數偵測），執行相關的安全功能需要等 Phase 4 的 Execution Engine 完成後才能實作。
 
 </deferred>
 
@@ -158,3 +173,4 @@ None — discussion stayed within phase scope
 
 *Phase: 01-security-foundation*
 *Context gathered: 2026-01-30*
+*Updated: 2026-01-30 — Added deferred items (SEC-04, SEC-05, SEC-06)*
