@@ -138,11 +138,18 @@ class Admin_Page {
 			'tsm-admin-page',
 			'tsmAdmin',
 			array(
-				'restUrl'    => rest_url( 'test-script-manager/v1' ),
-				'nonce'      => wp_create_nonce( 'wp_rest' ),
-				'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
-				'adminUrl'   => admin_url( 'admin.php' ),
-				'scriptsUrl' => site_url( '/test-scripts/' ),
+				'restUrl'            => rest_url( 'test-script-manager/v1' ),
+				'nonce'              => wp_create_nonce( 'wp_rest' ),
+				'ajaxUrl'            => admin_url( 'admin-ajax.php' ),
+				'adminUrl'           => admin_url( 'admin.php' ),
+				'scriptsUrl'         => site_url( '/test-scripts/' ),
+				// Background execution localization strings.
+				'scheduling'         => __( '排程中...', 'test-script-manager' ),
+				'background'         => __( '背景執行', 'test-script-manager' ),
+				'backgroundScheduled' => __( '腳本已排程背景執行，完成時會通知您。', 'test-script-manager' ),
+				'confirmCancel'      => __( '確定要取消此執行嗎？', 'test-script-manager' ),
+				'executionCancelled' => __( '執行已取消。', 'test-script-manager' ),
+				'selectScriptFirst'  => __( '請先選擇腳本。', 'test-script-manager' ),
 			)
 		);
 	}
@@ -248,9 +255,16 @@ class Admin_Page {
 							<button type="button" class="button button-primary" id="tsm-update-script">
 								<?php esc_html_e( '更新腳本', 'test-script-manager' ); ?>
 							</button>
-							<button type="button" class="button button-secondary" id="tsm-execute-script">
-								<?php esc_html_e( '執行', 'test-script-manager' ); ?>
-							</button>
+							<div class="tsm-execute-buttons">
+								<button type="button" class="button button-secondary" id="tsm-execute-script" title="<?php esc_attr_e( '立即執行 (Ctrl+Enter)', 'test-script-manager' ); ?>">
+									<span class="dashicons dashicons-controls-play"></span>
+									<?php esc_html_e( '執行', 'test-script-manager' ); ?>
+								</button>
+								<button type="button" class="button" id="tsm-execute-background-btn" title="<?php esc_attr_e( '在背景執行（不會逾時）', 'test-script-manager' ); ?>">
+									<span class="dashicons dashicons-cloud"></span>
+									<?php esc_html_e( '背景執行', 'test-script-manager' ); ?>
+								</button>
+							</div>
 						</div>
 
 						<div class="tsm-message" id="tsm-edit-message" style="display: none;"></div>

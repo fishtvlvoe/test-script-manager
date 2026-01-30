@@ -205,6 +205,38 @@
 	margin: 0;
 }
 
+/* Execute buttons container */
+.tsm-execute-buttons {
+	display: inline-flex;
+	gap: 8px;
+}
+
+.tsm-execute-buttons .button {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.tsm-execute-buttons .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+	line-height: 1;
+}
+
+/* Background button specific */
+#tsm-execute-background-btn {
+	color: #0073aa;
+}
+
+#tsm-execute-background-btn:hover {
+	color: #005a87;
+}
+
+#tsm-execute-background-btn:disabled {
+	color: #a7aaad;
+}
+
 /* Responsive adjustments */
 @media screen and (max-width: 782px) {
 	.tsm-admin-page .tsm-container {
