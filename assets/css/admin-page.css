@@ -237,6 +237,163 @@
 	color: #a7aaad;
 }
 
+/* Execution mode icons */
+.tsm-execution-mode-icon {
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+	margin-right: 4px;
+	vertical-align: middle;
+}
+
+.tsm-execution-mode-icon.sync {
+	color: #f0b849; /* yellow/gold for lightning */
+}
+
+.tsm-execution-mode-icon.background {
+	color: #0073aa; /* blue for cloud */
+}
+
+/* Status badges */
+.tsm-status-badge {
+	display: inline-block;
+	padding: 2px 8px;
+	border-radius: 3px;
+	font-size: 11px;
+	font-weight: 500;
+	text-transform: uppercase;
+}
+
+.tsm-status-badge.pending {
+	background-color: #f0f0f1;
+	color: #646970;
+}
+
+.tsm-status-badge.running {
+	background-color: #dde9f5;
+	color: #0073aa;
+}
+
+.tsm-status-badge.success {
+	background-color: #d4edda;
+	color: #155724;
+}
+
+.tsm-status-badge.error,
+.tsm-status-badge.fatal_error {
+	background-color: #f8d7da;
+	color: #721c24;
+}
+
+.tsm-status-badge.cancelled {
+	background-color: #fff3cd;
+	color: #856404;
+}
+
+.tsm-status-badge.retry {
+	background-color: #e2e3e5;
+	color: #383d41;
+}
+
+/* Cancel button */
+.tsm-cancel-btn {
+	color: #dc3232;
+	background: none;
+	border: none;
+	cursor: pointer;
+	padding: 2px 4px;
+	font-size: 14px;
+	line-height: 1;
+	opacity: 0.7;
+}
+
+.tsm-cancel-btn:hover {
+	opacity: 1;
+	color: #a00;
+}
+
+/* Execution history item */
+.tsm-execution-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 12px;
+	border-bottom: 1px solid #ddd;
+	cursor: pointer;
+}
+
+.tsm-execution-item:hover {
+	background-color: #f6f7f7;
+}
+
+.tsm-execution-item-left {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.tsm-execution-item-right {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.tsm-execution-time {
+	font-size: 12px;
+	color: #646970;
+}
+
+/* Spinning animation for loading state */
+@keyframes spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+.dashicons.spin {
+	animation: spin 1s linear infinite;
+}
+
+/* Inline notices container */
+#tsm-notices {
+	margin-bottom: 15px;
+}
+
+#tsm-notices .notice {
+	margin: 5px 0;
+}
+
+/* Execution history section */
+.tsm-execution-history {
+	margin-top: 30px;
+	padding-top: 20px;
+	border-top: 1px solid #ddd;
+}
+
+.tsm-execution-history h3 {
+	margin-top: 0;
+	margin-bottom: 15px;
+}
+
+.tsm-execution-list {
+	max-height: 300px;
+	overflow-y: auto;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+}
+
+.tsm-execution-list .tsm-loading {
+	padding: 15px;
+	text-align: center;
+	color: #646970;
+}
+
+.tsm-no-executions {
+	padding: 15px;
+	text-align: center;
+	color: #646970;
+	font-style: italic;
+}
+
 /* Responsive adjustments */
 @media screen and (max-width: 782px) {
 	.tsm-admin-page .tsm-container {

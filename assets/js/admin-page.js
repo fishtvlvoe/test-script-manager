@@ -493,6 +493,9 @@
 
 		// Load script content from API
 		loadScriptForEdit(scriptId);
+
+		// Load execution history for this script
+		loadExecutionHistory(scriptId);
 	}
 
 	/**
@@ -673,6 +676,113 @@
 		setTimeout(function() {
 			$message.fadeOut();
 		}, 3000);
+	}
+
+	/**
+	 * Load execution history for the current script.
+	 *
+	 * @param {number} scriptId Script ID.
+	 */
+	function loadExecutionHistory(scriptId) {
+		var $list = $('#tsm-execution-list');
+		$list.html('<div class="tsm-loading">Loading...</div>');
+
+		$.ajax({
+			url: tsmAdmin.restUrl + '/executions',
+			method: 'GET',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			data: {
+				script_id: scriptId,
+				per_page: 10
+			},
+			success: function(response) {
+				var executions = response.executions || [];
+				if (executions.length === 0) {
+					$list.html('<div class="tsm-no-executions">No executions yet.</div>');
+					return;
+				}
+
+				var html = '';
+				executions.forEach(function(execution) {
+					html += renderExecutionItem(execution);
+				});
+				$list.html(html);
+			},
+			error: function() {
+				$list.html('<div class="tsm-loading">Failed to load execution history.</div>');
+			}
+		});
+	}
+
+	/**
+	 * Render a single execution history item.
+	 *
+	 * @param {Object} execution Execution object from API.
+	 * @return {string} HTML string.
+	 */
+	function renderExecutionItem(execution) {
+		// Mode icon: cloud for background, lightning for sync
+		var modeIcon = execution.execution_mode === 'background'
+			? '<span class="dashicons dashicons-cloud tsm-execution-mode-icon background" title="Background execution"></span>'
+			: '<span class="dashicons dashicons-flash tsm-execution-mode-icon sync" title="Sync execution"></span>';
+
+		// Status badge with retry count
+		var statusText = execution.status;
+		if (execution.status === 'retry' && execution.retry_count > 0) {
+			statusText = 'Retry ' + execution.retry_count + '/3';
+		}
+		var statusBadge = '<span class="tsm-status-badge ' + execution.status + '">' + escapeHtml(statusText) + '</span>';
+
+		// Cancel button for cancellable states (only for background executions)
+		var isCancellable = ['pending', 'running', 'retry'].indexOf(execution.status) !== -1;
+		var cancelBtn = isCancellable && execution.execution_mode === 'background'
+			? '<button type="button" class="tsm-cancel-btn" data-execution-id="' + execution.id + '" title="Cancel execution">&times;</button>'
+			: '';
+
+		// Format time
+		var timeStr = execution.executed_at
+			? formatExecutionTime(execution.executed_at)
+			: 'Pending';
+
+		return '<div class="tsm-execution-item" data-execution-id="' + execution.id + '">' +
+			'<div class="tsm-execution-item-left">' +
+				modeIcon +
+				'<span class="tsm-execution-time">' + timeStr + '</span>' +
+			'</div>' +
+			'<div class="tsm-execution-item-right">' +
+				statusBadge +
+				cancelBtn +
+			'</div>' +
+		'</div>';
+	}
+
+	/**
+	 * Format execution time for display.
+	 *
+	 * @param {string} dateStr ISO date string.
+	 * @return {string} Formatted time string.
+	 */
+	function formatExecutionTime(dateStr) {
+		var date = new Date(dateStr);
+		var now = new Date();
+		var diff = now - date;
+
+		// If today, show time only
+		if (date.toDateString() === now.toDateString()) {
+			return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+		}
+
+		// If yesterday
+		var yesterday = new Date(now);
+		yesterday.setDate(yesterday.getDate() - 1);
+		if (date.toDateString() === yesterday.toDateString()) {
+			return 'Yesterday ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+		}
+
+		// Otherwise show date
+		return date.toLocaleDateString();
 	}
 
 	/**

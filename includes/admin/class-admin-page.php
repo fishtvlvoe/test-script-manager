@@ -268,6 +268,14 @@ class Admin_Page {
 						</div>
 
 						<div class="tsm-message" id="tsm-edit-message" style="display: none;"></div>
+
+						<!-- Execution history -->
+						<div class="tsm-execution-history" id="tsm-execution-history">
+							<h3><?php esc_html_e( '執行歷史', 'test-script-manager' ); ?></h3>
+							<div class="tsm-execution-list" id="tsm-execution-list">
+								<div class="tsm-loading"><?php esc_html_e( '載入中...', 'test-script-manager' ); ?></div>
+							</div>
+						</div>
 					</div>
 
 					<!-- Welcome message (shown by default) -->
