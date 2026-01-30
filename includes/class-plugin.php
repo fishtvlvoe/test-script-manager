@@ -81,8 +81,9 @@ class Plugin {
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-execution-service.php';
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-output-formatter.php';
 
-		// API endpoints (Phase 2, Plan 02).
+		// API endpoints (Phase 2, Plan 02 + Phase 4, Plan 02).
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-scripts-api.php';
+		require_once TSM_PLUGIN_DIR . 'includes/api/class-execution-api.php';
 
 		// Admin page (Phase 1, Plan 02).
 		require_once TSM_PLUGIN_DIR . 'includes/admin/class-admin-page.php';
@@ -99,6 +100,9 @@ class Plugin {
 		// Register REST API routes.
 		$scripts_api = new API\Scripts_API();
 		add_action( 'rest_api_init', array( $scripts_api, 'register_routes' ) );
+
+		$execution_api = new API\Execution_API();
+		add_action( 'rest_api_init', array( $execution_api, 'register_routes' ) );
 
 		// Initialize admin page (only in admin context).
 		if ( is_admin() ) {
