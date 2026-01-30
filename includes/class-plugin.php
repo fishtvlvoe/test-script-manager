@@ -73,6 +73,10 @@ class Plugin {
 		// Code scanner for dangerous function detection (Phase 1, Plan 02).
 		require_once TSM_PLUGIN_DIR . 'includes/class-code-scanner.php';
 
+		// Services (Phase 2, Plan 01).
+		require_once TSM_PLUGIN_DIR . 'includes/services/class-storage-service.php';
+		require_once TSM_PLUGIN_DIR . 'includes/services/class-script-service.php';
+
 		// Admin page (Phase 1, Plan 02).
 		require_once TSM_PLUGIN_DIR . 'includes/admin/class-admin-page.php';
 
