@@ -12,7 +12,7 @@ This roadmap delivers a WordPress admin tool that lets developers write, manage,
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Security Foundation** - Database schema, authentication layer, path resolution
+- [x] **Phase 1: Security Foundation** - Database schema, authentication layer, path resolution
 - [ ] **Phase 2: Script CRUD & Storage** - Script service, REST API endpoints, basic admin UI
 - [ ] **Phase 3: Monaco Editor Integration** - VS Code-quality code editor with multi-language support
 - [ ] **Phase 4: Execution Engine** - Script execution with output capture, formatting, and stats
@@ -35,8 +35,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 2 plans
 
 Plans:
-- [ ] 01-01-PLAN.md - Plugin skeleton, database schema with dbDelta, activation hooks
-- [ ] 01-02-PLAN.md - Security layer (nonce/capability), code scanner, admin menu
+- [x] 01-01-PLAN.md - Plugin skeleton, database schema with dbDelta, activation hooks
+- [x] 01-02-PLAN.md - Security layer (nonce/capability), code scanner, admin menu
 
 ### Phase 2: Script CRUD & Storage
 **Goal**: Users can create, read, update, and delete scripts through REST API and basic admin interface
@@ -146,7 +146,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Security Foundation | 0/2 | Ready to execute | - |
+| 1. Security Foundation | 2/2 | Complete | 2026-01-30 |
 | 2. Script CRUD & Storage | 0/3 | Not started | - |
 | 3. Monaco Editor Integration | 0/3 | Not started | - |
 | 4. Execution Engine | 0/3 | Not started | - |
