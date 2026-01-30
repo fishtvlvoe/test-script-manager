@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-30)
 
 **Core value:** 讓開發者能在 WordPress 後台一鍵編寫並執行測試腳本，立即看到格式化的結果，無需離開瀏覽器或處理檔案路徑問題
-**Current focus:** Phase 5 - Background Execution (in progress)
+**Current focus:** Phase 5 - Background Execution (COMPLETE)
 
 ## Current Position
 
-Phase: 5 of 7 (Background Execution) - IN PROGRESS
-Plan: 2 of 3 in current phase - COMPLETE
-Status: 05-02 complete, ready for 05-03
-Last activity: 2026-01-30 — Completed 05-02-PLAN.md (NotificationService and Background API)
+Phase: 5 of 7 (Background Execution) - COMPLETE
+Plan: 3 of 3 in current phase - COMPLETE
+Status: Phase 5 complete, ready for Phase 6
+Last activity: 2026-01-30 — Completed 05-03-PLAN.md (Background Execution UI)
 
-Progress: [████████░░] 93%
+Progress: [█████████░] 100% (Phase 5)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 14
-- Average duration: 9.9 min
-- Total execution time: 139 min
+- Total plans completed: 15
+- Average duration: 9.2 min
+- Total execution time: 142 min
 
 **By Phase:**
 
@@ -31,11 +31,11 @@ Progress: [████████░░] 93%
 | 02-script-crud-storage | 3 | 47 min | 16 min |
 | 03-monaco-editor-integration | 3 | 46 min | 15.3 min |
 | 04-execution-engine | 4 | 28 min | 7 min |
-| 05-background-execution | 2 | 6 min | 3 min |
+| 05-background-execution | 3 | 9 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-03 (15 min), 04-04 (8 min), 05-01 (3 min), 05-02 (3 min)
-- Trend: Infrastructure/service tasks completing efficiently
+- Last 5 plans: 04-04 (8 min), 05-01 (3 min), 05-02 (3 min), 05-03 (3 min)
+- Trend: Background execution phase completed very efficiently
 
 *Updated after each plan completion*
 
@@ -87,9 +87,13 @@ Recent decisions affecting current work:
 | Admin notices stored in transients (1 hour expiry) | 05-02 | Per-user notification queue |
 | Plain text email for notifications | 05-02 | Better email deliverability |
 | Status polling endpoint with is_cancellable flag | 05-02 | UI can show/hide cancel button based on status |
+| Execute buttons grouped in container | 05-03 | Visual cohesion for related actions |
+| Mode icons: cloud (background), lightning (sync) | 05-03 | Intuitive visual metaphors |
+| Cancel confirmation dialog | 05-03 | Prevent accidental cancellation |
+| Inline notices auto-dismiss after 5 seconds | 05-03 | Balance visibility with reduced clutter |
 
 Pending:
-- ~~Action Scheduler for background jobs~~ **RESOLVED in 05-01**
+- None
 
 ### Pending Todos
 
@@ -105,16 +109,16 @@ From research:
 ## Session Continuity
 
 Last session: 2026-01-30 (UTC+8)
-Stopped at: Completed 05-02-PLAN.md (NotificationService and Background API)
+Stopped at: Completed 05-03-PLAN.md (Background Execution UI) - Phase 5 complete
 Resume file: None
 
-**Phase 5 進度 (2/3 plans):**
+**Phase 5 完成 (3/3 plans):**
 - ✅ Action Scheduler 3.9.3 installed via Composer (05-01)
 - ✅ Database schema extended with background execution columns (05-01)
 - ✅ BackgroundExecutionService with schedule/execute/retry/cancel (05-01)
 - ✅ NotificationService with admin notices and email (05-02)
 - ✅ Background_API REST endpoints (05-02)
-- ⏳ Background Execution UI (05-03)
+- ✅ Background Execution UI with icons, badges, cancel (05-03)
 
 ---
-*Next step: Execute 05-03-PLAN.md (Background Execution UI)*
+*Next step: Phase 6 or Phase 7 planning*
