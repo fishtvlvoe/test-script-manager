@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-30)
 
 **Core value:** 讓開發者能在 WordPress 後台一鍵編寫並執行測試腳本，立即看到格式化的結果，無需離開瀏覽器或處理檔案路徑問題
-**Current focus:** Phase 4 - Execution Engine (COMPLETE with gap closure)
+**Current focus:** Phase 5 - Background Execution (in progress)
 
 ## Current Position
 
-Phase: 4 of 7 (Execution Engine) - VERIFIED
-Plan: 4 of 4 in current phase - COMPLETE (including gap closure)
-Status: Phase 4 verified (6/6 success criteria ✓), ready for Phase 5
-Last activity: 2026-01-30 — Completed 04-04-PLAN.md and verified phase goal (all gaps closed)
+Phase: 5 of 7 (Background Execution) - IN PROGRESS
+Plan: 1 of 3 in current phase - COMPLETE
+Status: 05-01 complete, ready for 05-02
+Last activity: 2026-01-30 — Completed 05-01-PLAN.md (Action Scheduler integration)
 
-Progress: [████████░░] 85%
+Progress: [████████░░] 87%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
-- Average duration: 11.1 min
-- Total execution time: 133 min
+- Total plans completed: 13
+- Average duration: 10.2 min
+- Total execution time: 136 min
 
 **By Phase:**
 
@@ -31,10 +31,11 @@ Progress: [████████░░] 85%
 | 02-script-crud-storage | 3 | 47 min | 16 min |
 | 03-monaco-editor-integration | 3 | 46 min | 15.3 min |
 | 04-execution-engine | 4 | 28 min | 7 min |
+| 05-background-execution | 1 | 3 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-01 (3 min), 04-02 (2 min), 04-03 (15 min), 04-04 (8 min)
-- Trend: Phase 4 efficient overall; 04-04 gap closure straightforward
+- Last 5 plans: 04-02 (2 min), 04-03 (15 min), 04-04 (8 min), 05-01 (3 min)
+- Trend: Infrastructure/service tasks completing efficiently
 
 *Updated after each plan completion*
 
@@ -80,9 +81,12 @@ Recent decisions affecting current work:
 | Auto-save before execute | 04-03 | Ensure latest code is executed |
 | Table detection only for JSON arrays | 04-04 | Preserves JSON viewer for non-table data |
 | Template table check before json/html | 04-04 | Pre-formatted table HTML takes priority |
+| Action Scheduler via Composer to includes/libraries | 05-01 | Keep vendor code within plugin structure |
+| Fatal errors (E_ERROR, E_PARSE, etc.) skip retry | 05-01 | These errors won't succeed on retry |
+| 5-minute retry delay, max 3 retries | 05-01 | Balance retry responsiveness with server load |
 
 Pending:
-- Action Scheduler for background jobs
+- ~~Action Scheduler for background jobs~~ **RESOLVED in 05-01**
 
 ### Pending Todos
 
@@ -93,21 +97,20 @@ None.
 From research:
 - ~~Symlink path resolution must be solved in Phase 1~~ **RESOLVED in 01-01** - TSM_PLUGIN_DIR works correctly
 - ~~Monaco Editor bundle size (>2MB) requires lazy loading~~ **RESOLVED in 03-01** - CDN loading with AMD loader
-- Action Scheduler may conflict with FluentCart's bundled version
+- ~~Action Scheduler may conflict with FluentCart's bundled version~~ **RESOLVED in 05-01** - Using 3.9.3 via Composer with function_exists() check
 
 ## Session Continuity
 
 Last session: 2026-01-30 (UTC+8)
-Stopped at: Completed Phase 4 execution and verification (all gaps closed)
+Stopped at: Completed 05-01-PLAN.md (Action Scheduler integration)
 Resume file: None
 
-**Phase 4 完成並驗證通過 (6/6 ✓):**
-- ✅ ExecutionService with tri-layer error capture (04-01)
-- ✅ OutputFormatter for result type detection (04-01)
-- ✅ Execution API endpoints (04-02)
-- ✅ Result page UI with formatted display (04-03)
-- ✅ Table formatting integration - format_as_table() now called (04-04 gap closure)
-- ✅ Phase goal verified: Users can execute scripts and see formatted output with error handling
+**Phase 5 進度 (1/3 plans):**
+- ✅ Action Scheduler 3.9.3 installed via Composer (05-01)
+- ✅ Database schema extended with background execution columns (05-01)
+- ✅ BackgroundExecutionService with schedule/execute/retry/cancel (05-01)
+- ⏳ Background Execution API (05-02)
+- ⏳ Background Execution UI (05-03)
 
 ---
-*Next step: Plan Phase 5 (Background Execution)*
+*Next step: Execute 05-02-PLAN.md (Background Execution API)*
