@@ -77,6 +77,10 @@ class Plugin {
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-storage-service.php';
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-script-service.php';
 
+		// Execution services (Phase 4, Plan 01).
+		require_once TSM_PLUGIN_DIR . 'includes/services/class-execution-service.php';
+		require_once TSM_PLUGIN_DIR . 'includes/services/class-output-formatter.php';
+
 		// API endpoints (Phase 2, Plan 02).
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-scripts-api.php';
 
