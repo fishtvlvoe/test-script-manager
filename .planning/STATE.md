@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-30)
 
 **Core value:** 讓開發者能在 WordPress 後台一鍵編寫並執行測試腳本，立即看到格式化的結果，無需離開瀏覽器或處理檔案路徑問題
-**Current focus:** Phase 5 - Background Execution (VERIFIED ✓)
+**Current focus:** Phase 6 - Version History (In Progress)
 
 ## Current Position
 
-Phase: 5 of 7 (Background Execution) - VERIFIED ✓
-Plan: 3 of 3 in current phase - COMPLETE
-Status: Phase 5 verified (7/7 success criteria ✓), ready for Phase 6
-Last activity: 2026-01-30 — Verified Phase 5 goal achievement
+Phase: 6 of 7 (Version History) - IN PROGRESS
+Plan: 1 of 3 in current phase - COMPLETE
+Status: Backend version service complete, ready for UI implementation
+Last activity: 2026-01-30 — Completed 06-01-PLAN.md (Version History Backend)
 
-Progress: [███████░░░] 71% overall (5 of 7 phases)
+Progress: [████████░░] 76% overall (5.33 of 7 phases)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 15
-- Average duration: 9.2 min
-- Total execution time: 142 min
+- Total plans completed: 16
+- Average duration: 8.9 min
+- Total execution time: 145 min
 
 **By Phase:**
 
@@ -32,10 +32,11 @@ Progress: [███████░░░] 71% overall (5 of 7 phases)
 | 03-monaco-editor-integration | 3 | 46 min | 15.3 min |
 | 04-execution-engine | 4 | 28 min | 7 min |
 | 05-background-execution | 3 | 9 min | 3 min |
+| 06-version-history | 1 | 3 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-04 (8 min), 05-01 (3 min), 05-02 (3 min), 05-03 (3 min)
-- Trend: Background execution phase completed very efficiently
+- Last 5 plans: 05-01 (3 min), 05-02 (3 min), 05-03 (3 min), 06-01 (3 min)
+- Trend: Maintaining efficient 3-minute execution for backend service plans
 
 *Updated after each plan completion*
 
@@ -91,6 +92,10 @@ Recent decisions affecting current work:
 | Mode icons: cloud (background), lightning (sync) | 05-03 | Intuitive visual metaphors |
 | Cancel confirmation dialog | 05-03 | Prevent accidental cancellation |
 | Inline notices auto-dismiss after 5 seconds | 05-03 | Balance visibility with reduced clutter |
+| Retention policy: 50 versions OR 30 days | 06-01 | Dual-threshold keeps more data, configurable via filters |
+| Version snapshot only on code change | 06-01 | Prevents duplicate snapshots when updating metadata |
+| Daily WP-Cron for cleanup | 06-01 | Better performance than cleanup on each save |
+| User attribution via get_current_user_id() ?: null | 06-01 | Handles both logged-in users and background processes |
 
 Pending:
 - None
@@ -109,19 +114,19 @@ From research:
 ## Session Continuity
 
 Last session: 2026-01-30 (UTC+8)
-Stopped at: Phase 5 verified (7/7 success criteria ✓)
+Stopped at: Completed Phase 6 Plan 1 (Version History Backend)
 Resume file: None
 
-**Phase 5 完成並驗證通過 (7/7 ✓):**
-- ✅ Action Scheduler 3.9.3 integration (05-01)
-- ✅ Database schema extensions (05-01)
-- ✅ BackgroundExecutionService with retry logic (05-01)
-- ✅ NotificationService (admin notices + email) (05-02)
-- ✅ Background_API REST endpoints (05-02)
-- ✅ Background Execution UI (icons, badges, cancel) (05-03)
-- ✅ Phase goal verified: Background execution without browser timeout ✓
+**Phase 6 Plan 1 完成 (06-01):**
+- ✅ Database migration to v1.2.0 with created_by column
+- ✅ VersionService with 6 CRUD methods
+- ✅ CleanupService with retention policy (50 versions OR 30 days)
+- ✅ Automatic version snapshots on script code updates
+- ✅ Version cleanup on script deletion
+- ✅ Daily WP-Cron cleanup registered
+- ✅ All 3 must-have truths verified (snapshots, user attribution, cleanup)
 
-**Key achievement:** Users can now execute long-running scripts in background, close browser, and receive notifications when complete. Failed jobs automatically retry (max 3x, 5-min delay). All 7 must-have truths verified.
+**Key achievement:** Version history backend complete with automatic snapshots, user tracking, and intelligent retention policy. Scripts now maintain full version history for rollback and comparison features.
 
 ---
-*Next step: Plan Phase 6 (Version History)*
+*Next step: Execute Phase 6 Plan 2 (Version History UI)*
