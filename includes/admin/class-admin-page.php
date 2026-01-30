@@ -218,6 +218,33 @@ class Admin_Page {
 						<div class="tsm-message" id="tsm-message" style="display: none;"></div>
 					</div>
 
+					<!-- Edit section (hidden by default) -->
+					<div class="tsm-edit-section" id="tsm-edit-section" style="display: none;">
+						<div class="tsm-edit-header">
+							<h2 id="tsm-edit-title"><?php esc_html_e( '編輯腳本', 'test-script-manager' ); ?></h2>
+							<button type="button" class="button" id="tsm-back-to-list">
+								<?php esc_html_e( '返回列表', 'test-script-manager' ); ?>
+							</button>
+						</div>
+
+						<div class="tsm-form-group">
+							<label><?php esc_html_e( '程式碼', 'test-script-manager' ); ?></label>
+							<div id="monaco-editor-edit" class="tsm-monaco-editor"></div>
+							<input type="hidden" id="tsm-edit-script-id" />
+						</div>
+
+						<div class="tsm-form-actions">
+							<button type="button" class="button button-primary" id="tsm-update-script">
+								<?php esc_html_e( '更新腳本', 'test-script-manager' ); ?>
+							</button>
+							<button type="button" class="button button-secondary" id="tsm-execute-script">
+								<?php esc_html_e( '執行', 'test-script-manager' ); ?>
+							</button>
+						</div>
+
+						<div class="tsm-message" id="tsm-edit-message" style="display: none;"></div>
+					</div>
+
 					<!-- Welcome message (shown by default) -->
 					<div class="tsm-welcome" id="tsm-welcome">
 						<h2><?php esc_html_e( '歡迎使用測試腳本管理', 'test-script-manager' ); ?></h2>

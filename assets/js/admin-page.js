@@ -11,6 +11,9 @@
 
 	let scripts = [];
 	let createEditor = null;
+	let editEditor = null;
+	let currentEditId = null;
+	let isLoadingScript = false;
 
 	// Load scripts on page load
 	$(document).ready(function() {
@@ -42,6 +45,23 @@
 				.replace(/[^a-z0-9]+/g, '-')
 				.replace(/^-+|-+$/g, '');
 			$('#tsm-script-slug').val(slug);
+		});
+
+		// Script list item click - edit mode
+		$('#tsm-script-list').on('click', '.tsm-script-item', function() {
+			const scriptId = $(this).data('id');
+			openEditMode(scriptId);
+		});
+
+		// Back to list
+		$('#tsm-back-to-list').on('click', hideEditSection);
+
+		// Update script
+		$('#tsm-update-script').on('click', updateScript);
+
+		// Execute script (placeholder for now)
+		$('#tsm-execute-script').on('click', function() {
+			showEditMessage('Execute feature coming in Phase 4', 'success');
 		});
 	}
 
@@ -312,6 +332,194 @@
 			createEditor.setValue('<?php\n\n// Your test script here\n');
 		}
 		$('#tsm-script-code').val('');
+	}
+
+	/**
+	 * Open edit mode for a script.
+	 *
+	 * @param {number} scriptId Script ID.
+	 */
+	function openEditMode(scriptId) {
+		// Hide other sections
+		$('#tsm-welcome, #tsm-create-form').hide();
+		$('#tsm-edit-section').show();
+
+		// Mark active in list
+		$('.tsm-script-item').removeClass('active');
+		$('.tsm-script-item[data-id="' + scriptId + '"]').addClass('active');
+
+		// Find script in cache
+		const script = scripts.find(s => s.id == scriptId);
+		if (script) {
+			$('#tsm-edit-title').text('Edit: ' + script.name);
+		}
+
+		// Store current edit ID
+		currentEditId = scriptId;
+		$('#tsm-edit-script-id').val(scriptId);
+
+		// Load script content from API
+		loadScriptForEdit(scriptId);
+	}
+
+	/**
+	 * Load script content for editing.
+	 *
+	 * @param {number} scriptId Script ID.
+	 */
+	function loadScriptForEdit(scriptId) {
+		// Show loading in editor container
+		const container = document.getElementById('monaco-editor-edit');
+		if (!container) return;
+
+		// Set loading flag to prevent auto-save trigger
+		isLoadingScript = true;
+
+		$.ajax({
+			url: tsmAdmin.restUrl + '/scripts/' + scriptId,
+			method: 'GET',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			success: function(response) {
+				if (response.script) {
+					createOrUpdateEditEditor(response.script.code || '<?php\n');
+				}
+			},
+			error: function(xhr) {
+				if (xhr.status === 404) {
+					showEditMessage('Script not found. It may have been deleted.', 'error');
+					hideEditSection();
+				} else {
+					showEditMessage('Failed to load script', 'error');
+				}
+			},
+			complete: function() {
+				isLoadingScript = false;
+			}
+		});
+	}
+
+	/**
+	 * Create or update edit editor with content.
+	 *
+	 * @param {string} code Code content.
+	 */
+	function createOrUpdateEditEditor(code) {
+		const container = document.getElementById('monaco-editor-edit');
+		if (!container) return;
+
+		// If editor exists, just update value
+		if (editEditor) {
+			isLoadingScript = true;
+			editEditor.setValue(code);
+			isLoadingScript = false;
+			return;
+		}
+
+		// Wait for Monaco to be ready
+		if (!tsmMonacoLoader.isReady()) {
+			$(container).addClass('loading').text('Loading editor...');
+			tsmLoadMonaco(function() {
+				createEditEditorInstance(container, code);
+			});
+		} else {
+			createEditEditorInstance(container, code);
+		}
+	}
+
+	/**
+	 * Create edit editor instance.
+	 *
+	 * @param {HTMLElement} container Container element.
+	 * @param {string} code Code content.
+	 */
+	function createEditEditorInstance(container, code) {
+		$(container).removeClass('loading').text('');
+
+		editEditor = tsmInitMonaco(container, {
+			value: code,
+			language: 'php'
+		});
+
+		if (editEditor) {
+			console.log('TSM: Edit Monaco editor initialized');
+		}
+	}
+
+	/**
+	 * Hide edit section and show welcome.
+	 */
+	function hideEditSection() {
+		$('#tsm-edit-section').hide();
+		$('#tsm-welcome').show();
+		$('#tsm-edit-message').hide();
+		$('.tsm-script-item').removeClass('active');
+		currentEditId = null;
+	}
+
+	/**
+	 * Update script via REST API.
+	 */
+	function updateScript() {
+		if (!currentEditId || !editEditor) {
+			showEditMessage('No script selected', 'error');
+			return;
+		}
+
+		const code = editEditor.getValue();
+
+		// Disable button during save
+		$('#tsm-update-script').prop('disabled', true).text('Saving...');
+
+		$.ajax({
+			url: tsmAdmin.restUrl + '/scripts/' + currentEditId,
+			method: 'PUT',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			data: {
+				code: code
+			},
+			success: function(response) {
+				showEditMessage('Script updated successfully!', 'success');
+
+				// Update local cache
+				const index = scripts.findIndex(s => s.id == currentEditId);
+				if (index !== -1) {
+					scripts[index].code = code;
+				}
+			},
+			error: function(xhr) {
+				const message = xhr.responseJSON && xhr.responseJSON.error
+					? xhr.responseJSON.error
+					: 'Failed to update script';
+				showEditMessage(message, 'error');
+			},
+			complete: function() {
+				$('#tsm-update-script').prop('disabled', false).text('Update Script');
+			}
+		});
+	}
+
+	/**
+	 * Show message in edit section.
+	 *
+	 * @param {string} text Message text.
+	 * @param {string} type Message type ('success' or 'error').
+	 */
+	function showEditMessage(text, type) {
+		const $message = $('#tsm-edit-message');
+		$message
+			.removeClass('success error')
+			.addClass(type)
+			.text(text)
+			.show();
+
+		// Auto-hide after 3 seconds
+		setTimeout(function() {
+			$message.fadeOut();
+		}, 3000);
 	}
 
 })(jQuery);

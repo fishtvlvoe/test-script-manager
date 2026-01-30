@@ -150,6 +150,22 @@
 	color: #ccc;
 }
 
+/* Edit section */
+.tsm-edit-section {
+	min-height: 500px;
+}
+
+.tsm-edit-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.tsm-edit-header h2 {
+	margin: 0;
+}
+
 /* Responsive adjustments */
 @media screen and (max-width: 782px) {
 	.tsm-admin-page .tsm-container {
