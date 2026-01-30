@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Script CRUD & Storage** - Script service, REST API endpoints, basic admin UI
 - [x] **Phase 3: Monaco Editor Integration** - VS Code-quality code editor with multi-language support
 - [x] **Phase 4: Execution Engine** - Script execution with output capture, formatting, and stats
-- [ ] **Phase 5: Background Execution** - Action Scheduler integration for long-running scripts
+- [x] **Phase 5: Background Execution** - Action Scheduler integration for long-running scripts
 - [ ] **Phase 6: Version History** - Snapshot creation, diff view, rollback functionality
 - [ ] **Phase 7: Output Enhancements & Polish** - Export formats, themes, categories, keyboard shortcuts
 
@@ -104,9 +104,9 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 05-01-PLAN.md — Action Scheduler integration, database schema, BackgroundExecutionService
-- [ ] 05-02-PLAN.md — NotificationService (Admin Notice + Email), Background REST API
-- [ ] 05-03-PLAN.md — UI: Background Execute button, status icons, cancel functionality
+- [x] 05-01-PLAN.md — Action Scheduler integration, database schema, BackgroundExecutionService
+- [x] 05-02-PLAN.md — NotificationService (Admin Notice + Email), Background REST API
+- [x] 05-03-PLAN.md — UI: Background Execute button, status icons, cancel functionality
 
 ### Phase 6: Version History
 **Goal**: Users can track script changes, compare versions, and rollback to previous states
@@ -152,10 +152,10 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 2. Script CRUD & Storage | 3/3 | Complete | 2026-01-30 |
 | 3. Monaco Editor Integration | 3/3 | Complete | 2026-01-30 |
 | 4. Execution Engine | 4/4 | Complete | 2026-01-30 |
-| 5. Background Execution | 0/3 | Planned | - |
+| 5. Background Execution | 3/3 | Complete | 2026-01-30 |
 | 6. Version History | 0/2 | Not started | - |
 | 7. Output Enhancements & Polish | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-30*
-*Last updated: 2026-01-30*
+*Last updated: 2026-01-30 (Phase 5 complete)*
