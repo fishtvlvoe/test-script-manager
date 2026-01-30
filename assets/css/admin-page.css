@@ -155,6 +155,45 @@
 	min-height: 500px;
 }
 
+/* Editor toolbar */
+.tsm-editor-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 0;
+	margin-bottom: 8px;
+}
+
+#tsm-theme-toggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+#tsm-theme-toggle .dashicons {
+	font-size: 16px;
+	width: 16px;
+	height: 16px;
+}
+
+/* Save indicator */
+.tsm-save-indicator {
+	font-size: 12px;
+	margin-left: 10px;
+}
+
+.tsm-save-indicator.saved {
+	color: #46b450;
+}
+
+.tsm-save-indicator.unsaved {
+	color: #f0ad4e;
+}
+
+.tsm-save-indicator.error {
+	color: #dc3232;
+}
+
 .tsm-edit-header {
 	display: flex;
 	justify-content: space-between;

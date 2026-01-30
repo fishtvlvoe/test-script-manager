@@ -20,12 +20,59 @@
 	var autoSaveTimeout = null;
 	var AUTOSAVE_DELAY = 3000; // 3 seconds
 
+	// Theme configuration - get saved theme or default to vs-dark
+	var currentTheme = localStorage.getItem('tsm-editor-theme') || 'vs-dark';
+
 	// Load scripts on page load
 	$(document).ready(function() {
 		loadScripts();
 		initEventHandlers();
 		initMonacoEditor();
+		initThemeToggle();
 	});
+
+	/**
+	 * Initialize theme toggle functionality.
+	 */
+	function initThemeToggle() {
+		var toggleBtn = document.getElementById('tsm-theme-toggle');
+		if (!toggleBtn) return;
+
+		// Set initial label based on current theme
+		updateThemeLabel(currentTheme);
+
+		toggleBtn.addEventListener('click', function() {
+			// Toggle between vs-dark and vs (light)
+			var newTheme = currentTheme === 'vs-dark' ? 'vs' : 'vs-dark';
+
+			// Apply to all Monaco editors globally
+			if (typeof monaco !== 'undefined' && monaco.editor) {
+				monaco.editor.setTheme(newTheme);
+			}
+
+			// Save preference to localStorage
+			localStorage.setItem('tsm-editor-theme', newTheme);
+			currentTheme = newTheme;
+
+			// Update button label
+			updateThemeLabel(newTheme);
+
+			console.log('TSM: Theme changed to', newTheme);
+		});
+	}
+
+	/**
+	 * Update theme toggle button label.
+	 *
+	 * @param {string} theme Current theme name.
+	 */
+	function updateThemeLabel(theme) {
+		var themeLabel = document.getElementById('tsm-theme-label');
+		if (themeLabel) {
+			// Button shows what clicking will switch TO
+			themeLabel.textContent = theme === 'vs-dark' ? 'Light Theme' : 'Dark Theme';
+		}
+	}
 
 	/**
 	 * Initialize event handlers.
@@ -296,10 +343,11 @@
 		// Clear loading state
 		$(container).removeClass('loading').text('');
 
-		// Create editor
+		// Create editor with saved theme
 		createEditor = tsmInitMonaco(container, {
 			value: '<?php\n\n// Your test script here\n',
-			language: 'php'
+			language: 'php',
+			theme: currentTheme
 		});
 
 		if (createEditor) {
@@ -520,9 +568,11 @@
 	function createEditEditorInstance(container, code) {
 		$(container).removeClass('loading').text('');
 
+		// Create editor with saved theme
 		editEditor = tsmInitMonaco(container, {
 			value: code,
-			language: 'php'
+			language: 'php',
+			theme: currentTheme
 		});
 
 		if (editEditor) {
