@@ -87,10 +87,11 @@ class Plugin {
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-version-service.php';
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-cleanup-service.php';
 
-		// API endpoints (Phase 2, Plan 02 + Phase 4, Plan 02 + Phase 5, Plan 02).
+		// API endpoints (Phase 2, Plan 02 + Phase 4, Plan 02 + Phase 5, Plan 02 + Phase 6, Plan 02).
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-scripts-api.php';
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-execution-api.php';
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-background-api.php';
+		require_once TSM_PLUGIN_DIR . 'includes/api/class-versions-api.php';
 
 		// Admin pages (Phase 1, Plan 02 + Phase 4, Plan 03).
 		require_once TSM_PLUGIN_DIR . 'includes/admin/class-admin-page.php';
@@ -114,6 +115,9 @@ class Plugin {
 
 		$background_api = new API\Background_API();
 		add_action( 'rest_api_init', array( $background_api, 'register_routes' ) );
+
+		$versions_api = new API\Versions_API();
+		add_action( 'rest_api_init', array( $versions_api, 'register_routes' ) );
 
 		// Initialize admin pages (only in admin context).
 		if ( is_admin() ) {
