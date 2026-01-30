@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-30)
 
 **Core value:** 讓開發者能在 WordPress 後台一鍵編寫並執行測試腳本，立即看到格式化的結果，無需離開瀏覽器或處理檔案路徑問題
-**Current focus:** Phase 4 - Execution Engine (IN PROGRESS)
+**Current focus:** Phase 4 - Execution Engine (COMPLETE)
 
 ## Current Position
 
-Phase: 4 of 7 (Execution Engine) - IN PROGRESS
-Plan: 1 of 2 in current phase - COMPLETE
-Status: 04-01 complete, ready for 04-02
-Last activity: 2026-01-30 — Completed 04-01-PLAN.md (ExecutionService and OutputFormatter)
+Phase: 4 of 7 (Execution Engine) - COMPLETE
+Plan: 2 of 2 in current phase - COMPLETE
+Status: Phase 4 complete, ready for Phase 5
+Last activity: 2026-01-30 — Completed 04-02-PLAN.md (Execution API endpoints)
 
-Progress: [███████░░░] 75%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 9
-- Average duration: 11.8 min
-- Total execution time: 108 min
+- Total plans completed: 10
+- Average duration: 10.6 min
+- Total execution time: 110 min
 
 **By Phase:**
 
@@ -30,11 +30,11 @@ Progress: [███████░░░] 75%
 | 01-security-foundation | 2 | 12 min | 6 min |
 | 02-script-crud-storage | 3 | 47 min | 16 min |
 | 03-monaco-editor-integration | 3 | 46 min | 15.3 min |
-| 04-execution-engine | 1 | 3 min | 3 min |
+| 04-execution-engine | 2 | 5 min | 2.5 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-01 (15 min), 03-02 (12 min), 03-03 (19 min), 04-01 (3 min)
-- Trend: Efficient execution, 04-01 was straightforward
+- Last 5 plans: 03-02 (12 min), 03-03 (19 min), 04-01 (3 min), 04-02 (2 min)
+- Trend: Phase 4 very efficient due to well-structured service layer
 
 *Updated after each plan completion*
 
@@ -72,6 +72,8 @@ Recent decisions affecting current work:
 | 10MB max output size | 04-01 | Prevent memory exhaustion from infinite loops |
 | 1-300 second timeout range | 04-01 | Balance quick scripts and long operations |
 | Tri-layer error capture | 04-01 | Catch errors/exceptions/fatal without crashing WP |
+| Cap execution list limit at 100 | 04-02 | Prevent excessive data transfer |
+| LEFT JOIN for script_name | 04-02 | Convenient for frontend display |
 
 Pending:
 - Action Scheduler for background jobs
@@ -90,13 +92,13 @@ From research:
 ## Session Continuity
 
 Last session: 2026-01-30 (UTC+8)
-Stopped at: Completed 04-01-PLAN.md (ExecutionService and OutputFormatter)
+Stopped at: Completed 04-02-PLAN.md (Execution API endpoints)
 Resume file: None
 
-**Phase 4 進度:**
+**Phase 4 完成:**
 - ✅ ExecutionService with tri-layer error capture (04-01)
 - ✅ OutputFormatter for result type detection (04-01)
-- ⏳ Execution API endpoints (04-02) - Next
+- ✅ Execution API endpoints (04-02)
 
 ---
-*Next step: Execute 04-02-PLAN.md (Execution API endpoints)*
+*Next step: Plan and execute Phase 5 (Frontend UI)*
