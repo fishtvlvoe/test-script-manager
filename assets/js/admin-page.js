@@ -113,6 +113,35 @@
 
 		// Execute script
 		$('#tsm-execute-script').on('click', executeCurrentScript);
+
+		// Background execute button
+		$('#tsm-execute-background-btn').on('click', executeBackground);
+
+		// Cancel buttons (event delegation for dynamically added buttons)
+		$(document).on('click', '.tsm-cancel-btn', function(e) {
+			e.stopPropagation(); // Prevent triggering execution item click
+			var executionId = $(this).data('execution-id');
+			if (executionId) {
+				cancelExecution(executionId);
+			}
+		});
+
+		// Click execution item to view result
+		$(document).on('click', '.tsm-execution-item', function(e) {
+			// Don't trigger if clicking cancel button
+			if ($(e.target).hasClass('tsm-cancel-btn')) {
+				return;
+			}
+
+			var executionId = $(this).data('execution-id');
+			// Only open result for completed executions
+			var $badge = $(this).find('.tsm-status-badge');
+			var status = $badge.attr('class').match(/\b(success|error|fatal_error|cancelled)\b/);
+			if (status && executionId) {
+				var resultUrl = tsmAdmin.adminUrl + '?page=tsm-result&execution_id=' + executionId;
+				window.open(resultUrl, '_blank');
+			}
+		});
 	}
 
 	/**
@@ -783,6 +812,152 @@
 
 		// Otherwise show date
 		return date.toLocaleDateString();
+	}
+
+	/**
+	 * Execute script in background.
+	 */
+	function executeBackground() {
+		if (!currentEditId) {
+			showNotice('error', tsmAdmin.selectScriptFirst || 'Please select a script first.');
+			return;
+		}
+
+		// Auto-save before execute (same as sync execute)
+		clearTimeout(autoSaveTimeout);
+		if (editEditor) {
+			// Synchronous save before execute
+			var content = editEditor.getValue();
+			$.ajax({
+				url: tsmAdmin.restUrl + '/scripts/' + currentEditId,
+				method: 'PUT',
+				async: false, // Wait for save to complete
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+				},
+				contentType: 'application/json',
+				data: JSON.stringify({ code: content })
+			});
+		}
+
+		var btn = document.getElementById('tsm-execute-background-btn');
+		btn.disabled = true;
+		btn.innerHTML = '<span class="dashicons dashicons-update spin"></span> ' + (tsmAdmin.scheduling || 'Scheduling...');
+
+		$.ajax({
+			url: tsmAdmin.restUrl + '/scripts/' + currentEditId + '/execute-background',
+			method: 'POST',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			success: function(response) {
+				if (response.success) {
+					// Show success message
+					showNotice('success', tsmAdmin.backgroundScheduled || 'Script scheduled for background execution. You will be notified when complete.');
+
+					// Refresh execution history
+					loadExecutionHistory(currentEditId);
+				} else {
+					showNotice('error', response.error || 'Failed to schedule background execution.');
+				}
+			},
+			error: function(xhr) {
+				var msg = xhr.responseJSON && xhr.responseJSON.error
+					? xhr.responseJSON.error
+					: 'Network error. Please try again.';
+				showNotice('error', msg);
+			},
+			complete: function() {
+				btn.disabled = false;
+				btn.innerHTML = '<span class="dashicons dashicons-cloud"></span> ' + (tsmAdmin.background || 'Background');
+			}
+		});
+	}
+
+	/**
+	 * Cancel execution with confirmation.
+	 *
+	 * @param {number} executionId Execution ID to cancel.
+	 */
+	function cancelExecution(executionId) {
+		// Confirmation dialog required per CONTEXT.md
+		var confirmed = confirm(tsmAdmin.confirmCancel || 'Are you sure you want to cancel this execution?');
+		if (!confirmed) {
+			return;
+		}
+
+		$.ajax({
+			url: tsmAdmin.restUrl + '/executions/' + executionId + '/cancel',
+			method: 'POST',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			success: function(response) {
+				if (response.success) {
+					showNotice('success', tsmAdmin.executionCancelled || 'Execution cancelled.');
+
+					// Update the item in history without full reload
+					var $item = $('.tsm-execution-item[data-execution-id="' + executionId + '"]');
+					if ($item.length) {
+						var $badge = $item.find('.tsm-status-badge');
+						if ($badge.length) {
+							$badge.removeClass('pending running retry').addClass('cancelled');
+							$badge.text('cancelled');
+						}
+						var $cancelBtn = $item.find('.tsm-cancel-btn');
+						if ($cancelBtn.length) {
+							$cancelBtn.remove();
+						}
+					}
+				} else {
+					showNotice('error', response.error || 'Failed to cancel execution.');
+				}
+			},
+			error: function(xhr) {
+				var msg = xhr.responseJSON && xhr.responseJSON.error
+					? xhr.responseJSON.error
+					: 'Network error. Please try again.';
+				showNotice('error', msg);
+			}
+		});
+	}
+
+	/**
+	 * Show inline notice.
+	 *
+	 * @param {string} type    Notice type ('success' or 'error').
+	 * @param {string} message Notice message.
+	 */
+	function showNotice(type, message) {
+		// Check if there's an existing notice container
+		var noticeContainer = document.getElementById('tsm-notices');
+		if (!noticeContainer) {
+			// Create notice container at top of main content area
+			noticeContainer = document.createElement('div');
+			noticeContainer.id = 'tsm-notices';
+			var contentArea = document.querySelector('.tsm-main-content');
+			if (contentArea) {
+				contentArea.insertBefore(noticeContainer, contentArea.firstChild);
+			}
+		}
+
+		var notice = document.createElement('div');
+		notice.className = 'notice notice-' + type + ' is-dismissible';
+		notice.innerHTML = '<p>' + escapeHtml(message) + '</p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss</span></button>';
+
+		noticeContainer.appendChild(notice);
+
+		// Auto-dismiss after 5 seconds
+		setTimeout(function() {
+			notice.style.transition = 'opacity 0.3s';
+			notice.style.opacity = '0';
+			setTimeout(function() { notice.remove(); }, 300);
+		}, 5000);
+
+		// Manual dismiss
+		notice.querySelector('.notice-dismiss').addEventListener('click', function() {
+			notice.remove();
+		});
 	}
 
 	/**
