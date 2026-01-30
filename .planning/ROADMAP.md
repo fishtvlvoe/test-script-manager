@@ -18,7 +18,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 4: Execution Engine** - Script execution with output capture, formatting, and stats
 - [x] **Phase 5: Background Execution** - Action Scheduler integration for long-running scripts
 - [x] **Phase 6: Version History** - Snapshot creation, diff view, rollback functionality
-- [ ] **Phase 7: Output Enhancements & Polish** - Export formats, themes, categories, keyboard shortcuts
+- [ ] **Phase 7: Output Enhancements & Polish** - Export formats, settings, categories, bulk operations
 
 ## Phase Details
 
@@ -127,19 +127,23 @@ Plans:
 ### Phase 7: Output Enhancements & Polish
 **Goal**: Professional-grade output formatting and organization features
 **Depends on**: Phase 4
-**Requirements**: STORE-12, STORE-13, STORE-14, EXEC-11, EXEC-12, EXEC-13, UI-06, SEC-05, SEC-06
+**Requirements**: STORE-12, STORE-13, STORE-14, EXEC-11, SEC-05, SEC-06
+**Deferred**: EXEC-12 (custom result formatters/themes), EXEC-13 (result comparison) - see Open Questions in 07-RESEARCH.md
 **Success Criteria** (what must be TRUE):
   1. User can export execution results as CSV, JSON, or Excel file
   2. User can organize scripts into custom categories
   3. User can add multiple tags to scripts for filtering
   4. User can create scripts from template library (common patterns)
   5. User can configure timeout and IP whitelist in settings page
-**Plans**: 3 plans
+  6. User can perform bulk operations (delete, categorize) on multiple scripts
+**Plans**: 5 plans
 
 Plans:
 - [ ] 07-01-PLAN.md — Export functionality (ExportService, Export_API, result page buttons)
 - [ ] 07-02-PLAN.md — Settings page with IP whitelist and timeout configuration
-- [ ] 07-03-PLAN.md — Categories, tags, and template library
+- [ ] 07-03-PLAN.md — Categories and templates backend (services and APIs)
+- [ ] 07-04-PLAN.md — Categories and templates UI integration
+- [ ] 07-05-PLAN.md — Bulk operations for managing multiple scripts
 
 ## Progress
 
@@ -154,8 +158,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 4. Execution Engine | 4/4 | Complete | 2026-01-30 |
 | 5. Background Execution | 3/3 | Complete | 2026-01-30 |
 | 6. Version History | 2/2 | Complete | 2026-01-30 |
-| 7. Output Enhancements & Polish | 0/3 | Planned | - |
+| 7. Output Enhancements & Polish | 0/5 | Planned | - |
 
 ---
 *Roadmap created: 2026-01-30*
-*Last updated: 2026-01-30 (Phase 7 planned)*
+*Last updated: 2026-01-30 (Phase 7 revised - 5 plans)*
