@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-30)
 
 **Core value:** 讓開發者能在 WordPress 後台一鍵編寫並執行測試腳本，立即看到格式化的結果，無需離開瀏覽器或處理檔案路徑問題
-**Current focus:** Phase 6 - Version History (In Progress)
+**Current focus:** Phase 6 - Version History (VERIFIED ✓)
 
 ## Current Position
 
-Phase: 6 of 7 (Version History) - IN PROGRESS
-Plan: 2 of 3 in current phase - COMPLETE
-Status: Version history UI complete with diff viewer and restore
-Last activity: 2026-01-30 — Completed 06-02-PLAN.md (Version History UI)
+Phase: 6 of 7 (Version History) - VERIFIED ✓
+Plan: 2 of 2 in current phase - COMPLETE
+Status: Phase 6 verified (5/5 success criteria ✓), ready for Phase 7
+Last activity: 2026-01-30 — Verified Phase 6 goal achievement
 
-Progress: [█████████░] 80% overall (5.67 of 7 phases)
+Progress: [█████████░] 86% overall (6 of 7 phases)
 
 ## Performance Metrics
 
@@ -118,18 +118,18 @@ From research:
 ## Session Continuity
 
 Last session: 2026-01-30 (UTC+8)
-Stopped at: Completed Phase 6 Plan 2 (Version History UI)
+Stopped at: Phase 6 verified (5/5 success criteria ✓)
 Resume file: None
 
-**Phase 6 Plan 2 完成 (06-02):**
-- ✅ Versions_API with 4 REST endpoints (list, get, compare, restore)
-- ✅ version-history.js with version list, diff modal, restore logic
-- ✅ Version history sidebar integrated into edit mode
-- ✅ Monaco Diff Editor with side-by-side/inline toggle
-- ✅ One-click restore with editor update
-- ✅ All 3 must-have truths verified (list, compare, restore)
+**Phase 6 完成並驗證通過 (5/5 ✓):**
+- ✅ Auto-snapshot before each save (06-01)
+- ✅ Version history sidebar with timestamps (06-02)
+- ✅ Monaco Diff Editor with added/removed highlighting (06-02)
+- ✅ One-click restore with confirmation (06-02)
+- ✅ Auto-cleanup with dual retention policy (06-01)
+- ✅ Phase goal verified: Version tracking, diff comparison, rollback ✓
 
-**Key achievement:** Complete version history UI with Monaco Diff Editor for side-by-side comparison and one-click restore. Users can view version timeline, compare any two versions with syntax highlighting, and restore previous versions seamlessly.
+**Key achievement:** Users can now track every script change with automatic snapshots, compare versions side-by-side with Monaco Diff Editor, and restore previous versions with one click. Old versions automatically cleaned up (50 versions OR 30 days retention).
 
 ---
-*Next step: Execute Phase 6 Plan 3 (Version History Testing) or Phase 7 (Documentation)*
+*Next step: Plan Phase 7 (Output Enhancements & Polish)*
