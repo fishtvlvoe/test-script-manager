@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-30)
 ## Current Position
 
 Phase: 5 of 7 (Background Execution) - IN PROGRESS
-Plan: 1 of 3 in current phase - COMPLETE
-Status: 05-01 complete, ready for 05-02
-Last activity: 2026-01-30 — Completed 05-01-PLAN.md (Action Scheduler integration)
+Plan: 2 of 3 in current phase - COMPLETE
+Status: 05-02 complete, ready for 05-03
+Last activity: 2026-01-30 — Completed 05-02-PLAN.md (NotificationService and Background API)
 
-Progress: [████████░░] 87%
+Progress: [████████░░] 93%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
-- Average duration: 10.2 min
-- Total execution time: 136 min
+- Total plans completed: 14
+- Average duration: 9.9 min
+- Total execution time: 139 min
 
 **By Phase:**
 
@@ -31,10 +31,10 @@ Progress: [████████░░] 87%
 | 02-script-crud-storage | 3 | 47 min | 16 min |
 | 03-monaco-editor-integration | 3 | 46 min | 15.3 min |
 | 04-execution-engine | 4 | 28 min | 7 min |
-| 05-background-execution | 1 | 3 min | 3 min |
+| 05-background-execution | 2 | 6 min | 3 min |
 
 **Recent Trend:**
-- Last 5 plans: 04-02 (2 min), 04-03 (15 min), 04-04 (8 min), 05-01 (3 min)
+- Last 5 plans: 04-03 (15 min), 04-04 (8 min), 05-01 (3 min), 05-02 (3 min)
 - Trend: Infrastructure/service tasks completing efficiently
 
 *Updated after each plan completion*
@@ -84,6 +84,9 @@ Recent decisions affecting current work:
 | Action Scheduler via Composer to includes/libraries | 05-01 | Keep vendor code within plugin structure |
 | Fatal errors (E_ERROR, E_PARSE, etc.) skip retry | 05-01 | These errors won't succeed on retry |
 | 5-minute retry delay, max 3 retries | 05-01 | Balance retry responsiveness with server load |
+| Admin notices stored in transients (1 hour expiry) | 05-02 | Per-user notification queue |
+| Plain text email for notifications | 05-02 | Better email deliverability |
+| Status polling endpoint with is_cancellable flag | 05-02 | UI can show/hide cancel button based on status |
 
 Pending:
 - ~~Action Scheduler for background jobs~~ **RESOLVED in 05-01**
@@ -102,15 +105,16 @@ From research:
 ## Session Continuity
 
 Last session: 2026-01-30 (UTC+8)
-Stopped at: Completed 05-01-PLAN.md (Action Scheduler integration)
+Stopped at: Completed 05-02-PLAN.md (NotificationService and Background API)
 Resume file: None
 
-**Phase 5 進度 (1/3 plans):**
+**Phase 5 進度 (2/3 plans):**
 - ✅ Action Scheduler 3.9.3 installed via Composer (05-01)
 - ✅ Database schema extended with background execution columns (05-01)
 - ✅ BackgroundExecutionService with schedule/execute/retry/cancel (05-01)
-- ⏳ Background Execution API (05-02)
+- ✅ NotificationService with admin notices and email (05-02)
+- ✅ Background_API REST endpoints (05-02)
 - ⏳ Background Execution UI (05-03)
 
 ---
-*Next step: Execute 05-02-PLAN.md (Background Execution API)*
+*Next step: Execute 05-03-PLAN.md (Background Execution UI)*
