@@ -69,6 +69,11 @@ class Admin_Page {
 	}
 
 	/**
+	 * Monaco Editor version.
+	 */
+	const MONACO_VERSION = '0.55.1';
+
+	/**
 	 * Enqueue admin assets (CSS/JS).
 	 *
 	 * Only loads on the plugin's admin page.
@@ -89,11 +94,41 @@ class Admin_Page {
 			TSM_VERSION
 		);
 
-		// Enqueue JS.
+		// Monaco Editor CDN loader.
+		wp_enqueue_script(
+			'monaco-loader',
+			'https://cdn.jsdelivr.net/npm/monaco-editor@' . self::MONACO_VERSION . '/min/vs/loader.js',
+			array(),
+			self::MONACO_VERSION,
+			true
+		);
+
+		// Monaco Editor initialization script.
+		wp_enqueue_script(
+			'tsm-monaco-loader',
+			TSM_PLUGIN_URL . 'assets/js/monaco-loader.js',
+			array( 'monaco-loader' ),
+			TSM_VERSION,
+			true
+		);
+
+		// Localize Monaco data.
+		wp_localize_script(
+			'tsm-monaco-loader',
+			'tsmMonaco',
+			array(
+				'cdnPath'      => 'https://cdn.jsdelivr.net/npm/monaco-editor@' . self::MONACO_VERSION . '/min/vs',
+				'ajaxUrl'      => admin_url( 'admin-ajax.php' ),
+				'nonce'        => wp_create_nonce( 'tsm_editor' ),
+				'defaultTheme' => 'vs-dark',
+			)
+		);
+
+		// Enqueue main admin JS.
 		wp_enqueue_script(
 			'tsm-admin-page',
 			TSM_PLUGIN_URL . 'assets/js/admin-page.js',
-			array( 'jquery' ),
+			array( 'jquery', 'tsm-monaco-loader' ),
 			TSM_VERSION,
 			true
 		);
