@@ -58,7 +58,7 @@ Plans:
 ### Phase 3: Monaco Editor Integration
 **Goal**: Users can edit scripts with VS Code-quality syntax highlighting and autocomplete
 **Depends on**: Phase 2
-**Requirements**: EDIT-01, EDIT-02, EDIT-03, EDIT-04, EDIT-05, EDIT-06, EDIT-07, EDIT-08, EDIT-09, UI-03
+**Requirements**: EDIT-01, EDIT-02, EDIT-03, EDIT-04, EDIT-06, EDIT-07, EDIT-08, EDIT-09, UI-03
 **Success Criteria** (what must be TRUE):
   1. Monaco Editor loads on the script edit page with syntax highlighting for PHP, SQL, JavaScript, CSS
   2. Editor provides autocomplete suggestions for WordPress functions and hooks
@@ -68,8 +68,8 @@ Plans:
 **Plans**: 3 plans
 
 Plans:
-- [ ] 03-01-PLAN.md - Monaco CDN loading and basic editor integration
-- [ ] 03-02-PLAN.md - WordPress autocomplete, auto-save, and keyboard shortcuts
+- [x] 03-01-PLAN.md - Monaco CDN loading and basic editor integration
+- [x] 03-02-PLAN.md - WordPress autocomplete, auto-save, and keyboard shortcuts
 - [ ] 03-03-PLAN.md - Theme switching and final verification
 
 ### Phase 4: Execution Engine
@@ -148,7 +148,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 |-------|----------------|--------|-----------|
 | 1. Security Foundation | 2/2 | Complete | 2026-01-30 |
 | 2. Script CRUD & Storage | 3/3 | Complete | 2026-01-30 |
-| 3. Monaco Editor Integration | 0/3 | Planned | - |
+| 3. Monaco Editor Integration | 2/3 | In Progress | - |
 | 4. Execution Engine | 0/3 | Not started | - |
 | 5. Background Execution | 0/2 | Not started | - |
 | 6. Version History | 0/2 | Not started | - |
