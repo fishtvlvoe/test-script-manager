@@ -85,8 +85,9 @@ class Plugin {
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-scripts-api.php';
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-execution-api.php';
 
-		// Admin page (Phase 1, Plan 02).
+		// Admin pages (Phase 1, Plan 02 + Phase 4, Plan 03).
 		require_once TSM_PLUGIN_DIR . 'includes/admin/class-admin-page.php';
+		require_once TSM_PLUGIN_DIR . 'includes/admin/class-result-page.php';
 	}
 
 	/**
@@ -104,9 +105,10 @@ class Plugin {
 		$execution_api = new API\Execution_API();
 		add_action( 'rest_api_init', array( $execution_api, 'register_routes' ) );
 
-		// Initialize admin page (only in admin context).
+		// Initialize admin pages (only in admin context).
 		if ( is_admin() ) {
 			new Admin_Page();
+			Admin\Result_Page::init();
 		}
 
 		// Future hooks:

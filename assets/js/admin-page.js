@@ -714,23 +714,66 @@
 	}
 
 	/**
-	 * Execute current script in new tab.
+	 * Execute current script via API and open result page.
 	 */
 	function executeCurrentScript() {
-		if (!currentScriptSlug) {
-			showEditMessage('Script slug not available', 'error');
+		if (!currentEditId) {
+			showEditMessage('Please save the script first', 'error');
 			return;
 		}
 
 		// First, save any pending changes
 		clearTimeout(autoSaveTimeout);
-		if (currentEditId && editEditor) {
-			performAutoSave(currentEditId);
+		if (editEditor) {
+			// Synchronous save before execute
+			var content = editEditor.getValue();
+			$.ajax({
+				url: tsmAdmin.restUrl + '/scripts/' + currentEditId,
+				method: 'PUT',
+				async: false, // Wait for save to complete
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+				},
+				contentType: 'application/json',
+				data: JSON.stringify({ code: content })
+			});
 		}
 
-		// Open script URL in new tab
-		var scriptUrl = tsmAdmin.scriptsUrl + 'test-' + currentScriptSlug + '.php';
-		window.open(scriptUrl, '_blank');
+		// Disable execute button during execution
+		var btn = $('#tsm-execute-script');
+		var originalText = btn.text();
+		btn.prop('disabled', true).text('Executing...');
+
+		// Call execute API
+		$.ajax({
+			url: tsmAdmin.restUrl + '/scripts/' + currentEditId + '/execute',
+			method: 'POST',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			data: {
+				timeout: 30
+			},
+			success: function(response) {
+				if (response.success && response.result && response.result.execution_id) {
+					// Open result page in new tab
+					var resultUrl = tsmAdmin.adminUrl + '?page=tsm-result&execution_id=' + response.result.execution_id;
+					window.open(resultUrl, '_blank');
+				} else {
+					var error = response.error || 'Execution failed';
+					showEditMessage(error, 'error');
+				}
+			},
+			error: function(xhr) {
+				var msg = xhr.responseJSON && xhr.responseJSON.error
+					? xhr.responseJSON.error
+					: 'Execution failed';
+				showEditMessage(msg, 'error');
+			},
+			complete: function() {
+				btn.prop('disabled', false).text(originalText);
+			}
+		});
 	}
 
 })(jQuery);

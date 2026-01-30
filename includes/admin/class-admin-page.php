@@ -141,6 +141,7 @@ class Admin_Page {
 				'restUrl'    => rest_url( 'test-script-manager/v1' ),
 				'nonce'      => wp_create_nonce( 'wp_rest' ),
 				'ajaxUrl'    => admin_url( 'admin-ajax.php' ),
+				'adminUrl'   => admin_url( 'admin.php' ),
 				'scriptsUrl' => site_url( '/test-scripts/' ),
 			)
 		);
