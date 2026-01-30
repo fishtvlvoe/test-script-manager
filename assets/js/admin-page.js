@@ -1,7 +1,7 @@
 /**
  * Test Script Manager - Admin Page JavaScript
  *
- * Handles script list loading, creation form, and search functionality.
+ * Handles script list loading, creation form, Monaco editor, and search functionality.
  *
  * @package TestScriptManager
  */
@@ -10,11 +10,13 @@
 	'use strict';
 
 	let scripts = [];
+	let createEditor = null;
 
 	// Load scripts on page load
 	$(document).ready(function() {
 		loadScripts();
 		initEventHandlers();
+		initMonacoEditor();
 	});
 
 	/**
@@ -117,7 +119,7 @@
 	function saveScript() {
 		const name = $('#tsm-script-name').val().trim();
 		const slug = $('#tsm-script-slug').val().trim();
-		const code = $('#tsm-script-code').val().trim();
+		const code = getEditorCode().trim();
 
 		if (!name || !slug || !code) {
 			showMessage('Please fill in all required fields.', 'error');
@@ -197,7 +199,8 @@
 	 * Clear form fields.
 	 */
 	function clearForm() {
-		$('#tsm-script-name, #tsm-script-slug, #tsm-script-code').val('');
+		$('#tsm-script-name, #tsm-script-slug').val('');
+		clearEditor();
 		$('#tsm-message').hide();
 	}
 
@@ -237,6 +240,78 @@
 		return text.replace(/[&<>"']/g, function(m) {
 			return map[m];
 		});
+	}
+
+	/**
+	 * Initialize Monaco Editor for create form.
+	 */
+	function initMonacoEditor() {
+		// Add loading state
+		$('#monaco-editor-create').addClass('loading').text('Loading editor...');
+
+		// Load Monaco
+		if (typeof tsmLoadMonaco === 'function') {
+			tsmLoadMonaco(function() {
+				createMonacoInstance();
+			});
+		} else {
+			console.error('TSM: Monaco loader not available');
+			$('#monaco-editor-create').text('Editor failed to load');
+		}
+	}
+
+	/**
+	 * Create Monaco editor instance for create form.
+	 */
+	function createMonacoInstance() {
+		const container = document.getElementById('monaco-editor-create');
+		if (!container) {
+			console.error('TSM: Create editor container not found');
+			return;
+		}
+
+		// Clear loading state
+		$(container).removeClass('loading').text('');
+
+		// Create editor
+		createEditor = tsmInitMonaco(container, {
+			value: '<?php\n\n// Your test script here\n',
+			language: 'php'
+		});
+
+		if (createEditor) {
+			// Sync editor value to hidden input before form submission
+			createEditor.onDidChangeModelContent(function() {
+				$('#tsm-script-code').val(createEditor.getValue());
+			});
+
+			// Set initial value
+			$('#tsm-script-code').val(createEditor.getValue());
+
+			console.log('TSM: Monaco editor initialized');
+		}
+	}
+
+	/**
+	 * Get code from editor.
+	 *
+	 * @return {string} Code from Monaco editor or empty string.
+	 */
+	function getEditorCode() {
+		if (createEditor) {
+			return createEditor.getValue();
+		}
+		return $('#tsm-script-code').val() || '';
+	}
+
+	/**
+	 * Clear editor content.
+	 */
+	function clearEditor() {
+		if (createEditor) {
+			createEditor.setValue('<?php\n\n// Your test script here\n');
+		}
+		$('#tsm-script-code').val('');
 	}
 
 })(jQuery);

@@ -133,6 +133,23 @@
 	margin-bottom: 10px;
 }
 
+/* Monaco Editor container */
+.tsm-monaco-editor {
+	height: 400px;
+	border: 1px solid #ccd0d4;
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+/* Loading state */
+.tsm-monaco-editor.loading {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #1e1e1e;
+	color: #ccc;
+}
+
 /* Responsive adjustments */
 @media screen and (max-width: 782px) {
 	.tsm-admin-page .tsm-container {
@@ -145,5 +162,9 @@
 
 	.tsm-script-list {
 		max-height: 300px;
+	}
+
+	.tsm-monaco-editor {
+		height: 300px;
 	}
 }

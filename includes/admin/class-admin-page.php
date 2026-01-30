@@ -201,7 +201,9 @@ class Admin_Page {
 
 						<div class="tsm-form-group">
 							<label for="tsm-script-code"><?php esc_html_e( '程式碼', 'test-script-manager' ); ?></label>
-							<textarea id="tsm-script-code" rows="10" required></textarea>
+							<p class="description"><?php esc_html_e( '以 <?php 開頭編寫 PHP 程式碼', 'test-script-manager' ); ?></p>
+							<div id="monaco-editor-create" class="tsm-monaco-editor"></div>
+							<input type="hidden" id="tsm-script-code" name="code" />
 						</div>
 
 						<div class="tsm-form-actions">
