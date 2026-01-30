@@ -25,7 +25,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ### Phase 1: Security Foundation
 **Goal**: Establish security boundaries and core infrastructure before any code execution capability
 **Depends on**: Nothing (first phase)
-**Requirements**: SEC-01, SEC-02, SEC-03, SEC-04, SEC-05, SEC-06, DB-01, DB-02, DB-03, DB-04, DB-05, UI-01
+**Requirements**: SEC-01, SEC-02, SEC-03, DB-01, DB-02, DB-03, DB-04, DB-05, UI-01
 **Success Criteria** (what must be TRUE):
   1. Only users with manage_options capability can access the admin menu
   2. All AJAX/REST requests are rejected without valid nonce
@@ -75,7 +75,7 @@ Plans:
 ### Phase 4: Execution Engine
 **Goal**: Users can execute scripts and see formatted output with error handling
 **Depends on**: Phase 1 (security), Phase 2 (storage)
-**Requirements**: EXEC-01, EXEC-02, EXEC-03, EXEC-04, EXEC-05, EXEC-09, EXEC-10, EXEC-14, EXEC-15, EXEC-16, API-06, API-09, API-10, UI-04, UI-05
+**Requirements**: EXEC-01, EXEC-02, EXEC-03, EXEC-04, EXEC-05, EXEC-09, EXEC-10, EXEC-14, EXEC-15, EXEC-16, API-06, API-09, API-10, UI-04, UI-05, SEC-04
 **Success Criteria** (what must be TRUE):
   1. User can click "Execute" and see script output in a new tab
   2. WordPress environment (wp-load.php) is loaded before script execution
@@ -125,7 +125,7 @@ Plans:
 ### Phase 7: Output Enhancements & Polish
 **Goal**: Professional-grade output formatting and organization features
 **Depends on**: Phase 4
-**Requirements**: STORE-12, STORE-13, STORE-14, EXEC-11, EXEC-12, EXEC-13, UI-06
+**Requirements**: STORE-12, STORE-13, STORE-14, EXEC-11, EXEC-12, EXEC-13, UI-06, SEC-05, SEC-06
 **Success Criteria** (what must be TRUE):
   1. User can export execution results as CSV, JSON, or Excel file
   2. User can organize scripts into custom categories
