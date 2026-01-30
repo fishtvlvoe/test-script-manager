@@ -25,8 +25,12 @@ class Database {
 	/**
 	 * Database schema version.
 	 * Increment this when making schema changes.
+	 *
+	 * Version History:
+	 * - 1.0.0: Initial schema
+	 * - 1.1.0: Added background execution columns to tsm_execution_logs
 	 */
-	const DB_VERSION = '1.0.0';
+	const DB_VERSION = '1.1.0';
 
 	/**
 	 * Option key for storing database version.
@@ -149,6 +153,15 @@ class Database {
 	 *
 	 * Stores script execution history and results.
 	 *
+	 * Status values:
+	 * - 'pending'     - Scheduled but not yet started (background only)
+	 * - 'running'     - Currently executing
+	 * - 'success'     - Completed successfully
+	 * - 'error'       - Failed with recoverable error
+	 * - 'fatal_error' - Failed with fatal error (no retry)
+	 * - 'cancelled'   - User cancelled the execution
+	 * - 'retry'       - Waiting for retry (scheduled again)
+	 *
 	 * @param string $charset_collate WordPress charset and collation.
 	 */
 	private static function create_execution_logs_table( $charset_collate ) {
@@ -156,6 +169,7 @@ class Database {
 
 		$table_name = self::get_table_name( self::TABLE_EXECUTION_LOGS );
 
+		// Note: dbDelta handles adding new columns to existing tables.
 		$sql = "CREATE TABLE $table_name (
 			id bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
 			script_id bigint(20) UNSIGNED NOT NULL,
@@ -165,10 +179,17 @@ class Database {
 			memory_usage bigint(20) NOT NULL DEFAULT 0,
 			status varchar(20) NOT NULL DEFAULT 'success',
 			executed_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+			execution_mode varchar(20) NOT NULL DEFAULT 'sync',
+			action_id bigint(20) UNSIGNED DEFAULT NULL,
+			retry_count tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
+			scheduled_at datetime DEFAULT NULL,
+			started_at datetime DEFAULT NULL,
+			user_id bigint(20) UNSIGNED DEFAULT NULL,
 			PRIMARY KEY  (id),
 			KEY script_id (script_id),
 			KEY executed_at (executed_at),
-			KEY status (status)
+			KEY status (status),
+			KEY execution_mode (execution_mode)
 		) $charset_collate;";
 
 		dbDelta( $sql );
