@@ -1,0 +1,242 @@
+/**
+ * Test Script Manager - Admin Page JavaScript
+ *
+ * Handles script list loading, creation form, and search functionality.
+ *
+ * @package TestScriptManager
+ */
+
+(function($) {
+	'use strict';
+
+	let scripts = [];
+
+	// Load scripts on page load
+	$(document).ready(function() {
+		loadScripts();
+		initEventHandlers();
+	});
+
+	/**
+	 * Initialize event handlers.
+	 */
+	function initEventHandlers() {
+		// New script button
+		$('#tsm-new-script').on('click', showCreateForm);
+
+		// Cancel create
+		$('#tsm-cancel-create').on('click', hideCreateForm);
+
+		// Save script
+		$('#tsm-save-script').on('click', saveScript);
+
+		// Search
+		$('#tsm-search').on('keyup', debounce(searchScripts, 300));
+
+		// Auto-generate slug from name
+		$('#tsm-script-name').on('keyup', function() {
+			const name = $(this).val();
+			const slug = name.toLowerCase()
+				.replace(/[^a-z0-9]+/g, '-')
+				.replace(/^-+|-+$/g, '');
+			$('#tsm-script-slug').val(slug);
+		});
+	}
+
+	/**
+	 * Load scripts from REST API.
+	 */
+	function loadScripts() {
+		$.ajax({
+			url: tsmAdmin.restUrl + '/scripts',
+			method: 'GET',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			success: function(response) {
+				scripts = response.scripts || [];
+				renderScriptList(scripts);
+			},
+			error: function() {
+				$('#tsm-script-list').html('<div class="tsm-loading">Failed to load scripts</div>');
+			}
+		});
+	}
+
+	/**
+	 * Render script list.
+	 *
+	 * @param {Array} scriptList Array of script objects.
+	 */
+	function renderScriptList(scriptList) {
+		const $list = $('#tsm-script-list');
+
+		if (scriptList.length === 0) {
+			$list.html('<div class="tsm-loading">No scripts yet. Create one to get started!</div>');
+			return;
+		}
+
+		let html = '';
+		scriptList.forEach(function(script) {
+			const lastExecuted = script.last_executed_at
+				? new Date(script.last_executed_at).toLocaleDateString()
+				: 'Never';
+
+			html += '<div class="tsm-script-item" data-id="' + script.id + '">';
+			html += '<div class="tsm-script-name">' + escapeHtml(script.name) + '</div>';
+			html += '<div class="tsm-script-meta">';
+			html += script.language + ' &bull; Last run: ' + lastExecuted;
+			html += '</div>';
+			html += '</div>';
+		});
+
+		$list.html(html);
+	}
+
+	/**
+	 * Show create form.
+	 */
+	function showCreateForm() {
+		$('#tsm-welcome').hide();
+		$('#tsm-create-form').show();
+		$('#tsm-script-name').focus();
+	}
+
+	/**
+	 * Hide create form.
+	 */
+	function hideCreateForm() {
+		$('#tsm-create-form').hide();
+		$('#tsm-welcome').show();
+		clearForm();
+	}
+
+	/**
+	 * Save script via REST API.
+	 */
+	function saveScript() {
+		const name = $('#tsm-script-name').val().trim();
+		const slug = $('#tsm-script-slug').val().trim();
+		const code = $('#tsm-script-code').val().trim();
+
+		if (!name || !slug || !code) {
+			showMessage('Please fill in all required fields.', 'error');
+			return;
+		}
+
+		// Disable button during save
+		$('#tsm-save-script').prop('disabled', true).text('Saving...');
+
+		$.ajax({
+			url: tsmAdmin.restUrl + '/scripts',
+			method: 'POST',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			data: {
+				name: name,
+				slug: slug,
+				code: code,
+				language: 'php'
+			},
+			success: function(response) {
+				showMessage('Script created successfully!', 'success');
+				clearForm();
+				loadScripts();
+
+				// Hide form after 1 second
+				setTimeout(hideCreateForm, 1000);
+			},
+			error: function(xhr) {
+				const message = xhr.responseJSON && xhr.responseJSON.error
+					? xhr.responseJSON.error
+					: 'Failed to create script';
+				showMessage(message, 'error');
+			},
+			complete: function() {
+				$('#tsm-save-script').prop('disabled', false).text('Save Script');
+			}
+		});
+	}
+
+	/**
+	 * Search scripts by keyword.
+	 */
+	function searchScripts() {
+		const keyword = $('#tsm-search').val().trim().toLowerCase();
+
+		if (!keyword) {
+			renderScriptList(scripts);
+			return;
+		}
+
+		const filtered = scripts.filter(function(script) {
+			return script.name.toLowerCase().indexOf(keyword) !== -1 ||
+			       (script.code && script.code.toLowerCase().indexOf(keyword) !== -1);
+		});
+
+		renderScriptList(filtered);
+	}
+
+	/**
+	 * Show message.
+	 *
+	 * @param {string} text    Message text.
+	 * @param {string} type    Message type ('success' or 'error').
+	 */
+	function showMessage(text, type) {
+		const $message = $('#tsm-message');
+		$message
+			.removeClass('success error')
+			.addClass(type)
+			.text(text)
+			.show();
+	}
+
+	/**
+	 * Clear form fields.
+	 */
+	function clearForm() {
+		$('#tsm-script-name, #tsm-script-slug, #tsm-script-code').val('');
+		$('#tsm-message').hide();
+	}
+
+	/**
+	 * Debounce function.
+	 *
+	 * @param {Function} func Function to debounce.
+	 * @param {number}   wait Wait time in milliseconds.
+	 * @return {Function} Debounced function.
+	 */
+	function debounce(func, wait) {
+		let timeout;
+		return function() {
+			const context = this;
+			const args = arguments;
+			clearTimeout(timeout);
+			timeout = setTimeout(function() {
+				func.apply(context, args);
+			}, wait);
+		};
+	}
+
+	/**
+	 * Escape HTML entities.
+	 *
+	 * @param {string} text Text to escape.
+	 * @return {string} Escaped text.
+	 */
+	function escapeHtml(text) {
+		const map = {
+			'&': '&amp;',
+			'<': '&lt;',
+			'>': '&gt;',
+			'"': '&quot;',
+			"'": '&#039;'
+		};
+		return text.replace(/[&<>"']/g, function(m) {
+			return map[m];
+		});
+	}
+
+})(jQuery);
