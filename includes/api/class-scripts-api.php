@@ -11,6 +11,7 @@ namespace TSM\API;
 
 use TSM\Security;
 use TSM\Services\ScriptService;
+use TSM\Services\ExecutionService;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
@@ -174,6 +175,31 @@ class Scripts_API {
 						'required'          => true,
 						'type'              => 'integer',
 						'sanitize_callback' => 'absint',
+					),
+				),
+			)
+		);
+
+		// POST /scripts/{id}/execute - Execute a script.
+		register_rest_route(
+			self::NAMESPACE,
+			'/scripts/(?P<id>\d+)/execute',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'execute_script' ),
+				'permission_callback' => array( 'TSM\Security', 'check_admin_permission' ),
+				'args'                => array(
+					'id'      => array(
+						'required'          => true,
+						'type'              => 'integer',
+						'sanitize_callback' => 'absint',
+					),
+					'timeout' => array(
+						'default'           => 30,
+						'type'              => 'integer',
+						'sanitize_callback' => 'absint',
+						'minimum'           => 1,
+						'maximum'           => 300,
 					),
 				),
 			)
@@ -369,6 +395,46 @@ class Scripts_API {
 		return new WP_REST_Response(
 			array(
 				'success' => true,
+			),
+			200
+		);
+	}
+
+	/**
+	 * Handle POST /scripts/{id}/execute - Execute a script.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 * @return WP_REST_Response Response with execution result or error.
+	 */
+	public function execute_script( WP_REST_Request $request ) {
+		$id      = $request->get_param( 'id' );
+		$timeout = $request->get_param( 'timeout' );
+
+		// Execute script.
+		$result = ExecutionService::execute( $id, $timeout );
+
+		// Handle WP_Error from ExecutionService.
+		if ( is_wp_error( $result ) ) {
+			$status = 400;
+			if ( 'tsm_script_not_found' === $result->get_error_code() ||
+				 'tsm_file_not_found' === $result->get_error_code() ) {
+				$status = 404;
+			}
+
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'error'   => $result->get_error_message(),
+					'code'    => $result->get_error_code(),
+				),
+				$status
+			);
+		}
+
+		return new WP_REST_Response(
+			array(
+				'success' => true,
+				'result'  => $result,
 			),
 			200
 		);
