@@ -135,13 +135,88 @@
 
 ## Traceability
 
-將在 roadmap 建立後填入。
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| SEC-01 | Phase 1 | Pending |
+| SEC-02 | Phase 1 | Pending |
+| SEC-03 | Phase 1 | Pending |
+| SEC-04 | Phase 1 | Pending |
+| SEC-05 | Phase 1 | Pending |
+| SEC-06 | Phase 1 | Pending |
+| DB-01 | Phase 1 | Pending |
+| DB-02 | Phase 1 | Pending |
+| DB-03 | Phase 1 | Pending |
+| DB-04 | Phase 1 | Pending |
+| DB-05 | Phase 1 | Pending |
+| UI-01 | Phase 1 | Pending |
+| STORE-01 | Phase 2 | Pending |
+| STORE-02 | Phase 2 | Pending |
+| STORE-03 | Phase 2 | Pending |
+| STORE-04 | Phase 2 | Pending |
+| STORE-05 | Phase 2 | Pending |
+| STORE-06 | Phase 2 | Pending |
+| STORE-07 | Phase 2 | Pending |
+| STORE-08 | Phase 2 | Pending |
+| STORE-09 | Phase 2 | Pending |
+| STORE-10 | Phase 2 | Pending |
+| STORE-11 | Phase 2 | Pending |
+| API-01 | Phase 2 | Pending |
+| API-02 | Phase 2 | Pending |
+| API-03 | Phase 2 | Pending |
+| API-04 | Phase 2 | Pending |
+| API-05 | Phase 2 | Pending |
+| UI-02 | Phase 2 | Pending |
+| EDIT-01 | Phase 3 | Pending |
+| EDIT-02 | Phase 3 | Pending |
+| EDIT-03 | Phase 3 | Pending |
+| EDIT-04 | Phase 3 | Pending |
+| EDIT-05 | Phase 3 | Pending |
+| EDIT-06 | Phase 3 | Pending |
+| EDIT-07 | Phase 3 | Pending |
+| EDIT-08 | Phase 3 | Pending |
+| EDIT-09 | Phase 3 | Pending |
+| UI-03 | Phase 3 | Pending |
+| EXEC-01 | Phase 4 | Pending |
+| EXEC-02 | Phase 4 | Pending |
+| EXEC-03 | Phase 4 | Pending |
+| EXEC-04 | Phase 4 | Pending |
+| EXEC-05 | Phase 4 | Pending |
+| EXEC-09 | Phase 4 | Pending |
+| EXEC-10 | Phase 4 | Pending |
+| EXEC-14 | Phase 4 | Pending |
+| EXEC-15 | Phase 4 | Pending |
+| EXEC-16 | Phase 4 | Pending |
+| API-06 | Phase 4 | Pending |
+| API-09 | Phase 4 | Pending |
+| API-10 | Phase 4 | Pending |
+| UI-04 | Phase 4 | Pending |
+| UI-05 | Phase 4 | Pending |
+| EXEC-06 | Phase 5 | Pending |
+| EXEC-07 | Phase 5 | Pending |
+| EXEC-08 | Phase 5 | Pending |
+| UI-08 | Phase 5 | Pending |
+| VER-01 | Phase 6 | Pending |
+| VER-02 | Phase 6 | Pending |
+| VER-03 | Phase 6 | Pending |
+| VER-04 | Phase 6 | Pending |
+| VER-05 | Phase 6 | Pending |
+| VER-06 | Phase 6 | Pending |
+| API-07 | Phase 6 | Pending |
+| API-08 | Phase 6 | Pending |
+| UI-07 | Phase 6 | Pending |
+| STORE-12 | Phase 7 | Pending |
+| STORE-13 | Phase 7 | Pending |
+| STORE-14 | Phase 7 | Pending |
+| EXEC-11 | Phase 7 | Pending |
+| EXEC-12 | Phase 7 | Pending |
+| EXEC-13 | Phase 7 | Pending |
+| UI-06 | Phase 7 | Pending |
 
 **Coverage:**
 - v1 requirements: 74 total
-- Mapped to phases: TBD
-- Unmapped: TBD
+- Mapped to phases: 74
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-30*
-*Last updated: 2026-01-30 after initial definition*
+*Last updated: 2026-01-30 after roadmap creation*
