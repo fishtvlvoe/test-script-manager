@@ -142,9 +142,11 @@ use TSM\Services\OutputFormatter;
 
 			<?php if ( empty( $data['output'] ) ) : ?>
 				<p class="tsm-empty"><?php esc_html_e( 'No output.', 'test-script-manager' ); ?></p>
+			<?php elseif ( 'table' === $data['output_type'] && ! empty( $data['table_html'] ) ) : ?>
+				<div class="tsm-table-output"><?php echo wp_kses_post( $data['table_html'] ); ?></div>
 			<?php elseif ( 'json' === $data['output_type'] ) : ?>
 				<div class="tsm-json-viewer" data-json="<?php echo esc_attr( $data['output'] ); ?>"></div>
-			<?php elseif ( 'html' === $data['output_type'] || 'table' === $data['output_type'] ) : ?>
+			<?php elseif ( 'html' === $data['output_type'] ) : ?>
 				<div class="tsm-html-output"><?php echo wp_kses_post( $data['output'] ); ?></div>
 			<?php else : ?>
 				<pre class="tsm-output-content"><?php echo esc_html( $data['output'] ); ?></pre>

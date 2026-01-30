@@ -281,9 +281,18 @@
    Table Results
    ========================================================================== */
 
+/* Table output container (for formatted database results) */
+.tsm-table-output {
+	overflow-x: auto;
+	padding: 15px;
+	background: #f8f8f8;
+	border: 1px solid #e1e1e1;
+	border-radius: 4px;
+}
+
 .tsm-table-wrapper {
 	overflow-x: auto;
-	margin: 15px 0;
+	margin: 0;
 }
 
 .tsm-result-table {
