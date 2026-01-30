@@ -163,6 +163,16 @@ class Result_Page {
 		// Detect output type for special formatting.
 		$data['output_type'] = OutputFormatter::detect_output_type( $execution['output'] );
 
+		// Attempt table formatting for JSON array data (database query results).
+		$data['table_html'] = '';
+		if ( 'json' === $data['output_type'] ) {
+			$decoded = json_decode( $execution['output'], true );
+			if ( is_array( $decoded ) && OutputFormatter::is_table_data( $decoded ) ) {
+				$data['table_html'] = OutputFormatter::format_as_table( $decoded );
+				$data['output_type'] = 'table'; // Switch type to table for template.
+			}
+		}
+
 		include TSM_PLUGIN_DIR . 'includes/admin/views/execution-result.php';
 	}
 }
