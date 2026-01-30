@@ -118,11 +118,11 @@ Plans:
   3. User can compare two versions with diff highlighting (added/removed lines)
   4. User can restore any previous version with one click
   5. Old versions are automatically cleaned up (keeps last 50 or 30 days)
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 06-01: Version service and API
-- [ ] 06-02: Diff view and restore UI
+- [ ] 06-01-PLAN.md — VersionService, CleanupService, database migration, auto-snapshot hooks
+- [ ] 06-02-PLAN.md — Versions REST API, Monaco Diff Editor UI, version history sidebar
 
 ### Phase 7: Output Enhancements & Polish
 **Goal**: Professional-grade output formatting and organization features
@@ -153,9 +153,9 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 3. Monaco Editor Integration | 3/3 | Complete | 2026-01-30 |
 | 4. Execution Engine | 4/4 | Complete | 2026-01-30 |
 | 5. Background Execution | 3/3 | Complete | 2026-01-30 |
-| 6. Version History | 0/2 | Not started | - |
+| 6. Version History | 0/2 | Planned | - |
 | 7. Output Enhancements & Polish | 0/3 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-30*
-*Last updated: 2026-01-30 (Phase 5 complete)*
+*Last updated: 2026-01-30 (Phase 6 planned)*
