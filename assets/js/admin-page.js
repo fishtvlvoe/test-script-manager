@@ -23,6 +23,16 @@
 	// Theme configuration - get saved theme or default to vs-dark
 	var currentTheme = localStorage.getItem('tsm-editor-theme') || 'vs-dark';
 
+	// Expose function to update editor from version restore
+	window.tsmUpdateEditorCode = function(code) {
+		if (editEditor) {
+			isLoadingScript = true;
+			editEditor.setValue(code);
+			isLoadingScript = false;
+			updateSaveIndicator('saved');
+		}
+	};
+
 	// Load scripts on page load
 	$(document).ready(function() {
 		loadScripts();
@@ -525,6 +535,11 @@
 
 		// Load execution history for this script
 		loadExecutionHistory(scriptId);
+
+		// Initialize version history (Phase 6, Plan 02)
+		if (typeof tsmVersionHistory !== 'undefined') {
+			tsmVersionHistory.init(scriptId);
+		}
 	}
 
 	/**
@@ -631,6 +646,11 @@
 	 * Hide edit section and show welcome.
 	 */
 	function hideEditSection() {
+		// Cleanup version history (Phase 6, Plan 02)
+		if (typeof tsmVersionHistory !== 'undefined') {
+			tsmVersionHistory.destroy();
+		}
+
 		// Cancel pending auto-save
 		clearTimeout(autoSaveTimeout);
 

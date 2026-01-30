@@ -133,6 +133,15 @@ class Admin_Page {
 			true
 		);
 
+		// Version history script (Phase 6, Plan 02).
+		wp_enqueue_script(
+			'tsm-version-history',
+			TSM_PLUGIN_URL . 'assets/js/version-history.js',
+			array( 'jquery', 'tsm-admin-page', 'tsm-monaco-loader' ),
+			TSM_VERSION,
+			true
+		);
+
 		// Localize script with REST API data.
 		wp_localize_script(
 			'tsm-admin-page',
@@ -274,6 +283,17 @@ class Admin_Page {
 							<h3><?php esc_html_e( '執行歷史', 'test-script-manager' ); ?></h3>
 							<div class="tsm-execution-list" id="tsm-execution-list">
 								<div class="tsm-loading"><?php esc_html_e( '載入中...', 'test-script-manager' ); ?></div>
+							</div>
+						</div>
+
+						<!-- Version history sidebar (Phase 6, Plan 02) -->
+						<div class="tsm-version-history" id="tsm-version-history">
+							<h3>
+								<span class="dashicons dashicons-backup"></span>
+								<?php esc_html_e( 'Version History', 'test-script-manager' ); ?>
+							</h3>
+							<div class="tsm-version-list" id="tsm-version-list">
+								<div class="tsm-loading"><?php esc_html_e( 'Loading...', 'test-script-manager' ); ?></div>
 							</div>
 						</div>
 					</div>
