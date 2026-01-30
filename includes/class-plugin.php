@@ -77,10 +77,11 @@ class Plugin {
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-storage-service.php';
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-script-service.php';
 
-		// Execution services (Phase 4, Plan 01 + Phase 5, Plan 01).
+		// Execution services (Phase 4, Plan 01 + Phase 5, Plan 01 + Plan 02).
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-execution-service.php';
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-output-formatter.php';
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-background-execution-service.php';
+		require_once TSM_PLUGIN_DIR . 'includes/services/class-notification-service.php';
 
 		// API endpoints (Phase 2, Plan 02 + Phase 4, Plan 02).
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-scripts-api.php';
@@ -110,6 +111,9 @@ class Plugin {
 		if ( is_admin() ) {
 			new Admin_Page();
 			Admin\Result_Page::init();
+
+			// Initialize notification service (Phase 5, Plan 02).
+			Services\NotificationService::init();
 		}
 
 		// Initialize background execution hooks (Phase 5, Plan 01).

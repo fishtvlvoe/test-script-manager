@@ -203,6 +203,12 @@ class BackgroundExecutionService {
 		// Success - save result and update status.
 		self::save_execution_result( $execution_id, $result );
 		self::update_execution_status( $execution_id, 'success' );
+
+		// Send completion notification.
+		$user_id = self::get_execution_user_id( $execution_id );
+		if ( $user_id ) {
+			NotificationService::send_completion_notification( $execution_id, 'success', $user_id );
+		}
 	}
 
 	/**
@@ -239,6 +245,12 @@ class BackgroundExecutionService {
 					),
 				)
 			);
+
+			// Send failure notification for fatal error.
+			$user_id = (int) $execution['user_id'];
+			if ( $user_id ) {
+				NotificationService::send_completion_notification( $execution_id, 'failed', $user_id );
+			}
 			return;
 		}
 
@@ -257,6 +269,12 @@ class BackgroundExecutionService {
 					),
 				)
 			);
+
+			// Send failure notification after exhausting retries.
+			$user_id = (int) $execution['user_id'];
+			if ( $user_id ) {
+				NotificationService::send_completion_notification( $execution_id, 'failed', $user_id );
+			}
 			return;
 		}
 
@@ -513,5 +531,20 @@ class BackgroundExecutionService {
 	 */
 	private static function is_fatal_error( $error_type ) {
 		return in_array( $error_type, self::FATAL_ERROR_TYPES, true );
+	}
+
+	/**
+	 * Get user ID for an execution log.
+	 *
+	 * @param int $execution_id Execution log ID.
+	 * @return int|null User ID or null if not found.
+	 */
+	private static function get_execution_user_id( $execution_id ) {
+		$execution = self::get_execution( $execution_id );
+		if ( ! $execution ) {
+			return null;
+		}
+
+		return (int) $execution['user_id'] ?: null;
 	}
 }
