@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-30)
 
 **Core value:** 讓開發者能在 WordPress 後台一鍵編寫並執行測試腳本，立即看到格式化的結果，無需離開瀏覽器或處理檔案路徑問題
-**Current focus:** Phase 4 - Execution Engine (COMPLETE)
+**Current focus:** Phase 4 - Execution Engine (COMPLETE with gap closure)
 
 ## Current Position
 
 Phase: 4 of 7 (Execution Engine) - COMPLETE
-Plan: 3 of 3 in current phase - COMPLETE
+Plan: 4 of 4 in current phase - COMPLETE (including gap closure)
 Status: Phase 4 complete, ready for Phase 5
-Last activity: 2026-01-30 — Completed 04-03-PLAN.md (Execution Result UI)
+Last activity: 2026-01-30 — Completed 04-04-PLAN.md (Table Formatting Integration - gap closure)
 
 Progress: [████████░░] 85%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 11
-- Average duration: 11.4 min
-- Total execution time: 125 min
+- Total plans completed: 12
+- Average duration: 11.1 min
+- Total execution time: 133 min
 
 **By Phase:**
 
@@ -30,11 +30,11 @@ Progress: [████████░░] 85%
 | 01-security-foundation | 2 | 12 min | 6 min |
 | 02-script-crud-storage | 3 | 47 min | 16 min |
 | 03-monaco-editor-integration | 3 | 46 min | 15.3 min |
-| 04-execution-engine | 3 | 20 min | 6.7 min |
+| 04-execution-engine | 4 | 28 min | 7 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-03 (19 min), 04-01 (3 min), 04-02 (2 min), 04-03 (15 min)
-- Trend: Phase 4 efficient overall; 04-03 longer due to UI complexity and checkpoint verification
+- Last 5 plans: 04-01 (3 min), 04-02 (2 min), 04-03 (15 min), 04-04 (8 min)
+- Trend: Phase 4 efficient overall; 04-04 gap closure straightforward
 
 *Updated after each plan completion*
 
@@ -78,6 +78,8 @@ Recent decisions affecting current work:
 | Hidden admin menu page for results | 04-03 | Accessible via URL without cluttering menu |
 | JSON viewer via CDN | 04-03 | Zero-config collapsible tree display |
 | Auto-save before execute | 04-03 | Ensure latest code is executed |
+| Table detection only for JSON arrays | 04-04 | Preserves JSON viewer for non-table data |
+| Template table check before json/html | 04-04 | Pre-formatted table HTML takes priority |
 
 Pending:
 - Action Scheduler for background jobs
@@ -96,7 +98,7 @@ From research:
 ## Session Continuity
 
 Last session: 2026-01-30 (UTC+8)
-Stopped at: Completed 04-03-PLAN.md (Execution Result UI)
+Stopped at: Completed 04-04-PLAN.md (Table Formatting Integration - gap closure)
 Resume file: None
 
 **Phase 4 完成:**
@@ -104,6 +106,7 @@ Resume file: None
 - ✅ OutputFormatter for result type detection (04-01)
 - ✅ Execution API endpoints (04-02)
 - ✅ Result page UI with formatted display (04-03)
+- ✅ Table formatting integration - format_as_table() now called (04-04 gap closure)
 
 ---
 *Next step: Plan and execute Phase 5 (Frontend UI)*
