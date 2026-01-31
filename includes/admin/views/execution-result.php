@@ -52,6 +52,22 @@ use TSM\Services\OutputFormatter;
 			</div>
 		</header>
 
+		<!-- Export Buttons -->
+		<div class="tsm-export-buttons">
+			<button type="button" class="button tsm-export-btn" data-format="csv">
+				<span class="dashicons dashicons-media-spreadsheet"></span>
+				<?php esc_html_e( 'Export CSV', 'test-script-manager' ); ?>
+			</button>
+			<button type="button" class="button tsm-export-btn" data-format="json">
+				<span class="dashicons dashicons-media-code"></span>
+				<?php esc_html_e( 'Export JSON', 'test-script-manager' ); ?>
+			</button>
+			<button type="button" class="button tsm-export-btn" data-format="excel">
+				<span class="dashicons dashicons-media-document"></span>
+				<?php esc_html_e( 'Export Excel', 'test-script-manager' ); ?>
+			</button>
+		</div>
+
 		<!-- Errors Section -->
 		<?php if ( ! empty( $data['errors'] ) || $data['exception'] || $data['fatal'] ) : ?>
 		<section class="tsm-errors">
@@ -167,5 +183,46 @@ use TSM\Services\OutputFormatter;
 		</footer>
 	</div>
 	<?php wp_footer(); ?>
+
+	<!-- Export Buttons CSS -->
+	<style>
+		.tsm-export-buttons {
+			margin: 15px 0;
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+		.tsm-export-buttons .button {
+			display: inline-flex;
+			align-items: center;
+			gap: 5px;
+		}
+		.tsm-export-buttons .dashicons {
+			font-size: 16px;
+			width: 16px;
+			height: 16px;
+			line-height: 16px;
+		}
+	</style>
+
+	<!-- Export Buttons JavaScript -->
+	<script>
+	(function() {
+		'use strict';
+
+		var executionId = <?php echo (int) $data['execution_id']; ?>;
+		var restNonce = '<?php echo esc_js( wp_create_nonce( 'wp_rest' ) ); ?>';
+		var restUrl = '<?php echo esc_js( rest_url( 'test-script-manager/v1/executions/' ) ); ?>';
+
+		document.querySelectorAll('.tsm-export-btn').forEach(function(button) {
+			button.addEventListener('click', function(e) {
+				e.preventDefault();
+				var format = this.dataset.format;
+				var url = restUrl + executionId + '/export?format=' + format + '&_wpnonce=' + restNonce;
+				window.location.href = url;
+			});
+		});
+	})();
+	</script>
 </body>
 </html>

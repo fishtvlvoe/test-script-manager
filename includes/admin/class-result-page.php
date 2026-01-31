@@ -149,6 +149,7 @@ class Result_Page {
 
 		// Prepare data for template.
 		$data = array(
+			'execution_id'   => $execution['id'],
 			'script_name'    => $script_name,
 			'status'         => $execution['status'],
 			'output'         => $execution['output'],
