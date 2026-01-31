@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-01-30)
 
 **Core value:** 讓開發者能在 WordPress 後台一鍵編寫並執行測試腳本，立即看到格式化的結果，無需離開瀏覽器或處理檔案路徑問題
-**Current focus:** Phase 7 - Output Enhancements & Polish (Wave 1 COMPLETE)
+**Current focus:** Phase 7 - Output Enhancements & Polish (COMPLETE)
 
 ## Current Position
 
 Phase: 7 of 7 (Output Enhancements & Polish)
-Plan: 3 of 4 in current phase - COMPLETE (Wave 1: 07-01, 07-02, 07-03)
-Status: Wave 1 complete, ready for 07-04 (UI integration)
-Last activity: 2026-01-31 — Completed 07-03-PLAN.md (Categories and Templates backend)
+Plan: 5 of 5 in current phase - COMPLETE (Wave 2: 07-04, 07-05)
+Status: Phase 7 complete, project finished
+Last activity: 2026-01-31 — Completed 07-05-PLAN.md (Bulk operations)
 
-Progress: [██████████] 95% overall (20 of 21 plans)
+Progress: [██████████] 100% overall (22 of 22 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 20
+- Total plans completed: 22
 - Average duration: 8.2 min
-- Total execution time: 163 min
+- Total execution time: 179 min
 
 **By Phase:**
 
@@ -33,10 +33,10 @@ Progress: [██████████] 95% overall (20 of 21 plans)
 | 04-execution-engine | 4 | 28 min | 7 min |
 | 05-background-execution | 3 | 9 min | 3 min |
 | 06-version-history | 2 | 7 min | 3.5 min |
-| 07-output-enhancements-polish | 3 | 14 min | 4.7 min |
+| 07-output-enhancements-polish | 5 | 30 min | 6 min |
 
 **Recent Trend:**
-- Last 5 plans: 06-01 (3 min), 06-02 (4 min), 07-01 (6 min), 07-02 (4 min), 07-03 (4 min)
+- Last 5 plans: 07-01 (6 min), 07-02 (4 min), 07-03 (4 min), 07-04 (8 min), 07-05 (8 min)
 - Trend: Maintaining efficient execution for focused plans
 
 *Updated after each plan completion*
@@ -107,6 +107,9 @@ Recent decisions affecting current work:
 | Static service methods for CategoryService | 07-03 | Consistent with existing service classes |
 | JSON file for templates | 07-03 | Easy to edit, version control friendly |
 | Template ID as JSON key | 07-03 | Simple lookup, human-readable |
+| Bulk mode toggle button | 07-05 | Keep UI clean when not bulk editing |
+| Confirmation for bulk actions | 07-05 | Prevent accidental bulk delete/categorize |
+| Row click toggles checkbox in bulk mode | 07-05 | Convenient selection without precise clicking |
 
 Pending:
 - None
@@ -125,10 +128,10 @@ From research:
 ## Session Continuity
 
 Last session: 2026-01-31 (UTC+8)
-Stopped at: Completed 07-03-PLAN.md (Categories and Templates backend)
+Stopped at: Completed 07-05-PLAN.md (Bulk operations)
 Resume file: None
 
-**Phase 7 Wave 1 完成 (Plans 01, 02, 03):**
+**Phase 7 完成 (All Plans 01-05):**
 
 **07-01 Export Functionality:**
 - ExportService with export_csv(), export_json(), export_excel()
@@ -146,7 +149,17 @@ Resume file: None
 - 6 built-in templates (db-query, user-list, option-get, etc.)
 - Categories_API and Templates_API REST endpoints
 
-**Key achievement:** Backend services complete for export, settings, categories, and templates. Ready for UI integration in 07-04.
+**07-04 UI Integration:**
+- Category filter dropdown in sidebar
+- Category selector checkboxes in edit mode
+- Template selection modal with "New from Template" button
+
+**07-05 Bulk Operations:**
+- POST /scripts/bulk endpoint with delete and set_category actions
+- Bulk edit mode toggle with checkbox selection
+- Select-all, action dropdown, and confirmation dialogs
+
+**Key achievement:** Test Script Manager plugin is feature-complete with all planned functionality implemented.
 
 ---
-*Next step: Execute Phase 7 Plan 04 (UI Integration)*
+*Project Status: COMPLETE*
