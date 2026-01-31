@@ -1,0 +1,21 @@
+uid=5_0 RootWebArea "Execution Result: Test Hello World" url="https://test.buygo.me/wp-admin/admin.php?page=tsm-result&execution_id=1"
+  uid=5_1 banner
+    uid=5_2 heading "Test Hello World" level="1"
+    uid=5_3 StaticText "SUCCESS"
+    uid=5_4 StaticText "0.1980 ms"
+  uid=5_5 StaticText "Output"
+  uid=5_6 button "Copy"
+  uid=5_7 StaticText "Hello, World!"
+  uid=5_8 contentinfo
+    uid=5_9 StaticText "Executed at: 2026-01-30 19:12:57"
+  uid=5_10 navigation "工具列"
+    uid=5_11 menu orientation="vertical"
+      uid=5_12 menuitem "選單" expandable
+      uid=5_13 menuitem "關於 WordPress" expandable
+      uid=5_14 menuitem "BuyGo 幫你代購" expandable
+      uid=5_15 menuitem "已有 1 項更新可供安裝"
+      uid=5_16 menuitem "0 則待審閱留言"
+      uid=5_17 menuitem "新增項目" expandable
+      uid=5_18 menuitem "Logo 即時模式" description="FluentCart" expandable
+    uid=5_19 menu orientation="vertical"
+      uid=5_20 menuitem "你好，余啟銘" expandable

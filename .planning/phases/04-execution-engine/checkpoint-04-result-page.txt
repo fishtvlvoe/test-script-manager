@@ -1,0 +1,2 @@
+uid=4_0 RootWebArea "WordPress › 錯誤" url="https://test.buygo.me/wp-admin/admin.php?page=tsm-result&execution_id=1"
+  uid=4_1 StaticText "很抱歉，目前的登入身分沒有存取這個頁面的權限。"

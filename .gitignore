@@ -1,0 +1,55 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Dependencies
+node_modules/
+vendor/
+
+# Build
+*.zip
+build/
+dist/
+
+# Logs
+*.log
+debug.log
+
+# WordPress
+wp-config.php
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Test files
+/tests/
+phpunit.xml
+.phpunit.result.cache
+
+# PHPCS
+phpcs.xml
+.phpcs.xml
+
+# Composer
+composer.lock
+
+# NPM
+package-lock.json
+
+# Temp files
+*.tmp
+*.temp
+*.swp
+*~
+
+# Planning docs (keep in repo for reference)
+# .planning/

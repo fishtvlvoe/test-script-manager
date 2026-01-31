@@ -110,6 +110,9 @@ class Plugin {
 		require_once TSM_PLUGIN_DIR . 'includes/admin/class-admin-page.php';
 		require_once TSM_PLUGIN_DIR . 'includes/admin/class-result-page.php';
 		require_once TSM_PLUGIN_DIR . 'includes/admin/class-settings-page.php';
+
+		// GitHub Updater for automatic updates.
+		require_once TSM_PLUGIN_DIR . 'includes/class-github-updater.php';
 	}
 
 	/**
@@ -152,6 +155,10 @@ class Plugin {
 
 			// Initialize notification service (Phase 5, Plan 02).
 			Services\NotificationService::init();
+
+			// Initialize GitHub Updater for automatic updates.
+			$github_updater = new GitHub_Updater();
+			$github_updater->init();
 		}
 
 		// Initialize background execution hooks (Phase 5, Plan 01).
