@@ -11,6 +11,7 @@
 namespace TSM\Services;
 
 use TSM\Database;
+use TSM\Services\CategoryService;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -315,6 +316,9 @@ class ScriptService {
 
 		// Delete all versions for this script (Phase 6, Plan 01).
 		VersionService::delete_all_versions( $id );
+
+		// Delete category associations (Phase 7, Plan 04).
+		CategoryService::delete_script_categories( $id );
 
 		// Delete from database.
 		$result = $wpdb->delete(
