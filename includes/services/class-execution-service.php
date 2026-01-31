@@ -74,10 +74,23 @@ class ExecutionService {
 	 * @param int $timeout   Execution timeout in seconds (1-300, default 30).
 	 * @return array|\WP_Error Execution result array or WP_Error on failure.
 	 */
-	public static function execute( $script_id, $timeout = self::DEFAULT_TIMEOUT ) {
+	public static function execute( $script_id, $timeout = null ) {
 		// Reset captured data.
 		self::$captured_errors    = array();
 		self::$captured_exception = null;
+
+		// Check IP whitelist (Phase 7, Plan 02).
+		if ( ! SettingsService::is_ip_whitelisted() ) {
+			return new \WP_Error(
+				'tsm_ip_not_whitelisted',
+				__( 'Your IP address is not whitelisted for script execution.', 'test-script-manager' )
+			);
+		}
+
+		// Get timeout from settings if not provided (Phase 7, Plan 02).
+		if ( null === $timeout ) {
+			$timeout = SettingsService::get_timeout();
+		}
 
 		// Validate timeout.
 		$timeout = max( 1, min( (int) $timeout, self::MAX_TIMEOUT ) );
@@ -201,10 +214,11 @@ class ExecutionService {
 		$execution_time = $end_time - $start_time;
 		$memory_usage   = $end_memory - $start_memory;
 
-		// Truncate output if too large.
+		// Truncate output if too large (Phase 7, Plan 02: use configurable limit).
 		$truncated = false;
-		if ( strlen( $output ) > self::MAX_OUTPUT_SIZE ) {
-			$output    = substr( $output, 0, self::MAX_OUTPUT_SIZE );
+		$output_limit = SettingsService::get_output_limit();
+		if ( strlen( $output ) > $output_limit ) {
+			$output    = substr( $output, 0, $output_limit );
 			$truncated = true;
 		}
 
