@@ -100,9 +100,10 @@ class Plugin {
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-versions-api.php';
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-export-api.php';
 
-		// Admin pages (Phase 1, Plan 02 + Phase 4, Plan 03).
+		// Admin pages (Phase 1, Plan 02 + Phase 4, Plan 03 + Phase 7, Plan 02).
 		require_once TSM_PLUGIN_DIR . 'includes/admin/class-admin-page.php';
 		require_once TSM_PLUGIN_DIR . 'includes/admin/class-result-page.php';
+		require_once TSM_PLUGIN_DIR . 'includes/admin/class-settings-page.php';
 	}
 
 	/**
@@ -133,6 +134,9 @@ class Plugin {
 		if ( is_admin() ) {
 			new Admin_Page();
 			Admin\Result_Page::init();
+
+			// Initialize settings page (Phase 7, Plan 02).
+			new Admin\Settings_Page();
 
 			// Initialize notification service (Phase 5, Plan 02).
 			Services\NotificationService::init();
