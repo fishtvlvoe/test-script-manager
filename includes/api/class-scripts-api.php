@@ -12,6 +12,7 @@ namespace TSM\API;
 use TSM\Security;
 use TSM\Services\ScriptService;
 use TSM\Services\ExecutionService;
+use TSM\Services\CategoryService;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
@@ -200,6 +201,38 @@ class Scripts_API {
 						'sanitize_callback' => 'absint',
 						'minimum'           => 1,
 						'maximum'           => 300,
+					),
+				),
+			)
+		);
+
+		// POST /scripts/bulk - Bulk operations on multiple scripts.
+		register_rest_route(
+			self::NAMESPACE,
+			'/scripts/bulk',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this, 'bulk_action' ),
+				'permission_callback' => array( 'TSM\Security', 'check_admin_permission' ),
+				'args'                => array(
+					'action'      => array(
+						'required'          => true,
+						'type'              => 'string',
+						'enum'              => array( 'delete', 'set_category' ),
+						'sanitize_callback' => 'sanitize_text_field',
+					),
+					'script_ids'  => array(
+						'required'          => true,
+						'type'              => 'array',
+						'items'             => array( 'type' => 'integer' ),
+						'sanitize_callback' => function ( $ids ) {
+							return array_map( 'absint', (array) $ids );
+						},
+					),
+					'category_id' => array(
+						'required'          => false,
+						'type'              => 'integer',
+						'sanitize_callback' => 'absint',
 					),
 				),
 			)
@@ -438,5 +471,77 @@ class Scripts_API {
 			),
 			200
 		);
+	}
+
+	/**
+	 * Handle POST /scripts/bulk - Bulk operations on multiple scripts.
+	 *
+	 * Supports actions:
+	 * - delete: Delete multiple scripts
+	 * - set_category: Assign a category to multiple scripts
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 * @return WP_REST_Response Response with success/failed counts or error.
+	 */
+	public function bulk_action( WP_REST_Request $request ) {
+		$action     = $request->get_param( 'action' );
+		$script_ids = $request->get_param( 'script_ids' );
+
+		$results = array(
+			'success' => 0,
+			'failed'  => 0,
+			'errors'  => array(),
+		);
+
+		if ( empty( $script_ids ) ) {
+			return new WP_REST_Response(
+				array(
+					'success' => false,
+					'error'   => __( 'No scripts selected.', 'test-script-manager' ),
+					'code'    => 'tsm_no_scripts',
+				),
+				400
+			);
+		}
+
+		switch ( $action ) {
+			case 'delete':
+				foreach ( $script_ids as $id ) {
+					$result = ScriptService::delete( $id );
+					if ( is_wp_error( $result ) ) {
+						$results['failed']++;
+						$results['errors'][] = $id . ': ' . $result->get_error_message();
+					} else {
+						$results['success']++;
+					}
+				}
+				break;
+
+			case 'set_category':
+				$category_id = $request->get_param( 'category_id' );
+				if ( ! $category_id ) {
+					return new WP_REST_Response(
+						array(
+							'success' => false,
+							'error'   => __( 'Category ID is required.', 'test-script-manager' ),
+							'code'    => 'tsm_no_category',
+						),
+						400
+					);
+				}
+
+				foreach ( $script_ids as $id ) {
+					$result = CategoryService::set_script_categories( $id, array( $category_id ) );
+					if ( is_wp_error( $result ) ) {
+						$results['failed']++;
+						$results['errors'][] = $id . ': ' . $result->get_error_message();
+					} else {
+						$results['success']++;
+					}
+				}
+				break;
+		}
+
+		return new WP_REST_Response( $results, 200 );
 	}
 }
