@@ -15,6 +15,8 @@
 	let currentEditId = null;
 	let isLoadingScript = false;
 	let currentScriptSlug = null;
+	let categories = []; // Phase 7, Plan 04
+	let bulkModeActive = false; // Phase 7, Plan 05
 
 	// Auto-save configuration
 	var autoSaveTimeout = null;
@@ -36,7 +38,9 @@
 	// Load scripts on page load
 	$(document).ready(function() {
 		loadScripts();
+		loadCategories(); // Phase 7, Plan 04
 		initEventHandlers();
+		initBulkMode(); // Phase 7, Plan 05
 		initMonacoEditor();
 		initThemeToggle();
 	});
@@ -99,6 +103,9 @@
 
 		// Search
 		$('#tsm-search').on('keyup', debounce(searchScripts, 300));
+
+		// Category filter (Phase 7, Plan 04)
+		$('#tsm-category-select').on('change', filterByCategory);
 
 		// Auto-generate slug from name
 		$('#tsm-script-name').on('keyup', function() {
@@ -170,6 +177,89 @@
 			},
 			error: function() {
 				$('#tsm-script-list').html('<div class="tsm-loading">Failed to load scripts</div>');
+			}
+		});
+	}
+
+	/**
+	 * Load categories from REST API (Phase 7, Plan 04).
+	 */
+	function loadCategories() {
+		$.ajax({
+			url: tsmAdmin.restUrl + '/categories',
+			method: 'GET',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			success: function(response) {
+				categories = response.categories || [];
+				renderCategoryDropdown(categories);
+			},
+			error: function() {
+				console.error('TSM: Failed to load categories');
+			}
+		});
+	}
+
+	/**
+	 * Render category dropdown options (Phase 7, Plan 04).
+	 *
+	 * @param {Array} categoryList Array of category objects.
+	 */
+	function renderCategoryDropdown(categoryList) {
+		var $select = $('#tsm-category-select');
+		// Keep the "All Categories" option
+		$select.find('option:not(:first)').remove();
+
+		categoryList.forEach(function(category) {
+			$select.append('<option value="' + category.id + '">' + escapeHtml(category.name) + '</option>');
+		});
+	}
+
+	/**
+	 * Filter scripts by selected category (Phase 7, Plan 04).
+	 */
+	function filterByCategory() {
+		var categoryId = $('#tsm-category-select').val();
+		var keyword = $('#tsm-search').val().trim().toLowerCase();
+
+		if (!categoryId) {
+			// Show all scripts (apply keyword filter if any)
+			if (keyword) {
+				searchScripts();
+			} else {
+				renderScriptList(scripts);
+			}
+			return;
+		}
+
+		// Fetch script IDs for this category
+		$.ajax({
+			url: tsmAdmin.restUrl + '/categories/' + categoryId + '/scripts',
+			method: 'GET',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			success: function(response) {
+				var scriptIds = response.script_ids || [];
+
+				// Filter local scripts array
+				var filtered = scripts.filter(function(script) {
+					var inCategory = scriptIds.indexOf(parseInt(script.id)) !== -1;
+					if (!inCategory) return false;
+
+					// Also apply keyword filter if any
+					if (keyword) {
+						return script.name.toLowerCase().indexOf(keyword) !== -1 ||
+						       (script.code && script.code.toLowerCase().indexOf(keyword) !== -1);
+					}
+					return true;
+				});
+
+				renderScriptList(filtered);
+			},
+			error: function() {
+				console.error('TSM: Failed to filter by category');
 			}
 		});
 	}
@@ -536,10 +626,128 @@
 		// Load execution history for this script
 		loadExecutionHistory(scriptId);
 
+		// Load script categories (Phase 7, Plan 04)
+		loadScriptCategories(scriptId);
+
 		// Initialize version history (Phase 6, Plan 02)
 		if (typeof tsmVersionHistory !== 'undefined') {
 			tsmVersionHistory.init(scriptId);
 		}
+	}
+
+	/**
+	 * Load categories for a script and render checkboxes (Phase 7, Plan 04).
+	 *
+	 * @param {number} scriptId Script ID.
+	 */
+	function loadScriptCategories(scriptId) {
+		var $container = $('#tsm-category-checkboxes');
+		$container.html('<span class="tsm-loading">Loading...</span>');
+
+		// First ensure we have categories loaded
+		if (categories.length === 0) {
+			$.ajax({
+				url: tsmAdmin.restUrl + '/categories',
+				method: 'GET',
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+				},
+				success: function(response) {
+					categories = response.categories || [];
+					fetchScriptCategoriesAndRender(scriptId, $container);
+				},
+				error: function() {
+					$container.html('<span class="tsm-error">Failed to load categories</span>');
+				}
+			});
+		} else {
+			fetchScriptCategoriesAndRender(scriptId, $container);
+		}
+	}
+
+	/**
+	 * Fetch script's assigned categories and render checkboxes (Phase 7, Plan 04).
+	 *
+	 * @param {number} scriptId Script ID.
+	 * @param {jQuery} $container Container element.
+	 */
+	function fetchScriptCategoriesAndRender(scriptId, $container) {
+		$.ajax({
+			url: tsmAdmin.restUrl + '/scripts/' + scriptId + '/categories',
+			method: 'GET',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			success: function(response) {
+				var assignedIds = (response.categories || []).map(function(c) {
+					return parseInt(c.id);
+				});
+				renderCategoryCheckboxes($container, assignedIds);
+			},
+			error: function() {
+				// If 404, script has no categories - render empty checkboxes
+				renderCategoryCheckboxes($container, []);
+			}
+		});
+	}
+
+	/**
+	 * Render category checkboxes (Phase 7, Plan 04).
+	 *
+	 * @param {jQuery} $container Container element.
+	 * @param {Array} assignedIds Array of assigned category IDs.
+	 */
+	function renderCategoryCheckboxes($container, assignedIds) {
+		if (categories.length === 0) {
+			$container.html('<span class="tsm-no-categories">No categories available.</span>');
+			return;
+		}
+
+		var html = '';
+		categories.forEach(function(category) {
+			var checked = assignedIds.indexOf(parseInt(category.id)) !== -1 ? ' checked' : '';
+			html += '<label class="tsm-category-checkbox">';
+			html += '<input type="checkbox" name="tsm_categories[]" value="' + category.id + '"' + checked + '>';
+			html += ' ' + escapeHtml(category.name);
+			html += '</label>';
+		});
+
+		$container.html(html);
+
+		// Add change handler for auto-save categories
+		$container.find('input[type="checkbox"]').on('change', function() {
+			saveScriptCategories(currentEditId);
+		});
+	}
+
+	/**
+	 * Save script categories (Phase 7, Plan 04).
+	 *
+	 * @param {number} scriptId Script ID.
+	 */
+	function saveScriptCategories(scriptId) {
+		var selectedIds = [];
+		$('#tsm-category-checkboxes input:checked').each(function() {
+			selectedIds.push(parseInt($(this).val()));
+		});
+
+		$.ajax({
+			url: tsmAdmin.restUrl + '/scripts/' + scriptId + '/categories',
+			method: 'PUT',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			contentType: 'application/json',
+			data: JSON.stringify({
+				category_ids: selectedIds
+			}),
+			success: function(response) {
+				console.log('TSM: Categories saved');
+			},
+			error: function(xhr) {
+				console.error('TSM: Failed to save categories', xhr.responseJSON);
+			}
+		});
 	}
 
 	/**
@@ -1077,6 +1285,234 @@
 			},
 			complete: function() {
 				btn.prop('disabled', false).text(originalText);
+			}
+		});
+	}
+
+	// ========================================
+	// Phase 7, Plan 05: Bulk Operations
+	// ========================================
+
+	/**
+	 * Initialize bulk mode functionality.
+	 */
+	function initBulkMode() {
+		// Toggle bulk mode button
+		$('#tsm-toggle-bulk-mode').on('click', toggleBulkMode);
+
+		// Select all checkbox
+		$('#tsm-select-all').on('change', function() {
+			var isChecked = $(this).prop('checked');
+			$('.tsm-script-checkbox:visible').prop('checked', isChecked);
+			updateBulkSelectedCount();
+		});
+
+		// Individual checkbox change (event delegation)
+		$(document).on('change', '.tsm-script-checkbox', function() {
+			updateBulkSelectedCount();
+			// Update select-all state
+			var totalVisible = $('.tsm-script-checkbox:visible').length;
+			var checkedVisible = $('.tsm-script-checkbox:visible:checked').length;
+			$('#tsm-select-all').prop('checked', totalVisible > 0 && totalVisible === checkedVisible);
+		});
+
+		// Bulk action select change
+		$('#tsm-bulk-action-select').on('change', function() {
+			var action = $(this).val();
+			if (action === 'set_category') {
+				populateBulkCategorySelect();
+				$('#tsm-bulk-category-select').show();
+			} else {
+				$('#tsm-bulk-category-select').hide();
+			}
+		});
+
+		// Apply bulk action
+		$('#tsm-apply-bulk').on('click', applyBulkAction);
+	}
+
+	/**
+	 * Toggle bulk edit mode.
+	 */
+	function toggleBulkMode() {
+		bulkModeActive = !bulkModeActive;
+
+		var $bulkActions = $('#tsm-bulk-actions');
+		var $toggleBtn = $('#tsm-toggle-bulk-mode');
+
+		if (bulkModeActive) {
+			$bulkActions.show();
+			$toggleBtn.text(tsmAdmin.exitBulkEdit || 'Exit Bulk Edit');
+			// Re-render script list to add checkboxes
+			renderScriptListWithCheckboxes();
+		} else {
+			$bulkActions.hide();
+			$toggleBtn.text(tsmAdmin.bulkEdit || 'Bulk Edit');
+			// Re-render script list without checkboxes
+			renderScriptList(scripts);
+			// Reset selections
+			$('#tsm-select-all').prop('checked', false);
+			$('#tsm-bulk-action-select').val('');
+			$('#tsm-bulk-category-select').hide();
+			$('#tsm-apply-bulk').prop('disabled', true);
+		}
+
+		updateBulkSelectedCount();
+	}
+
+	/**
+	 * Render script list with checkboxes for bulk mode.
+	 */
+	function renderScriptListWithCheckboxes() {
+		const $list = $('#tsm-script-list');
+
+		if (scripts.length === 0) {
+			$list.html('<div class="tsm-loading">No scripts yet. Create one to get started!</div>');
+			return;
+		}
+
+		let html = '';
+		scripts.forEach(function(script) {
+			const lastExecuted = script.last_executed_at
+				? new Date(script.last_executed_at).toLocaleDateString()
+				: 'Never';
+
+			html += '<div class="tsm-script-item" data-id="' + script.id + '">';
+			html += '<input type="checkbox" class="tsm-script-checkbox" data-script-id="' + script.id + '">';
+			html += '<div class="tsm-script-info">';
+			html += '<div class="tsm-script-name">' + escapeHtml(script.name) + '</div>';
+			html += '<div class="tsm-script-meta">';
+			html += script.language + ' &bull; Last run: ' + lastExecuted;
+			html += '</div>';
+			html += '</div>';
+			html += '</div>';
+		});
+
+		$list.html(html);
+
+		// In bulk mode, clicking item should NOT open edit mode
+		// Only clicking on non-checkbox area should toggle checkbox
+		$('#tsm-script-list').off('click', '.tsm-script-item');
+		$('#tsm-script-list').on('click', '.tsm-script-item', function(e) {
+			if (bulkModeActive) {
+				// Toggle checkbox unless clicking the checkbox itself
+				if (!$(e.target).is('.tsm-script-checkbox')) {
+					var $checkbox = $(this).find('.tsm-script-checkbox');
+					$checkbox.prop('checked', !$checkbox.prop('checked')).trigger('change');
+				}
+			} else {
+				const scriptId = $(this).data('id');
+				openEditMode(scriptId);
+			}
+		});
+	}
+
+	/**
+	 * Update selected count display.
+	 */
+	function updateBulkSelectedCount() {
+		var count = $('.tsm-script-checkbox:checked').length;
+		$('.tsm-selected-count').text(count + ' ' + (tsmAdmin.selected || 'selected'));
+		$('#tsm-apply-bulk').prop('disabled', count === 0);
+	}
+
+	/**
+	 * Populate bulk category select dropdown.
+	 */
+	function populateBulkCategorySelect() {
+		var $select = $('#tsm-bulk-category-select');
+		$select.empty();
+		$select.append('<option value="">' + (tsmAdmin.setCategory || 'Select Category') + '</option>');
+
+		categories.forEach(function(category) {
+			$select.append('<option value="' + category.id + '">' + escapeHtml(category.name) + '</option>');
+		});
+	}
+
+	/**
+	 * Apply bulk action to selected scripts.
+	 */
+	function applyBulkAction() {
+		var action = $('#tsm-bulk-action-select').val();
+		if (!action) {
+			showNotice('error', 'Please select an action.');
+			return;
+		}
+
+		var scriptIds = [];
+		$('.tsm-script-checkbox:checked').each(function() {
+			scriptIds.push(parseInt($(this).data('script-id')));
+		});
+
+		if (scriptIds.length === 0) {
+			showNotice('error', 'Please select at least one script.');
+			return;
+		}
+
+		// Confirmation
+		var confirmMsg;
+		if (action === 'delete') {
+			confirmMsg = (tsmAdmin.confirmBulkDelete || 'Delete %d scripts? This cannot be undone.').replace('%d', scriptIds.length);
+		} else {
+			confirmMsg = (tsmAdmin.confirmBulkCategory || 'Set category for %d scripts?').replace('%d', scriptIds.length);
+		}
+
+		if (!confirm(confirmMsg)) {
+			return;
+		}
+
+		// Build payload
+		var payload = {
+			action: action,
+			script_ids: scriptIds
+		};
+
+		if (action === 'set_category') {
+			var categoryId = parseInt($('#tsm-bulk-category-select').val());
+			if (!categoryId) {
+				showNotice('error', 'Please select a category.');
+				return;
+			}
+			payload.category_id = categoryId;
+		}
+
+		// Disable apply button
+		$('#tsm-apply-bulk').prop('disabled', true).text('Processing...');
+
+		$.ajax({
+			url: tsmAdmin.restUrl + '/scripts/bulk',
+			method: 'POST',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			contentType: 'application/json',
+			data: JSON.stringify(payload),
+			success: function(response) {
+				var msg = (tsmAdmin.bulkSuccess || 'Success: %d, Failed: %d')
+					.replace('%d', response.success)
+					.replace('%d', response.failed);
+				showNotice('success', msg);
+
+				// Refresh script list for delete action
+				if (action === 'delete') {
+					loadScripts();
+				}
+
+				// Reset bulk mode UI
+				$('.tsm-script-checkbox').prop('checked', false);
+				$('#tsm-select-all').prop('checked', false);
+				$('#tsm-bulk-action-select').val('');
+				$('#tsm-bulk-category-select').hide();
+				updateBulkSelectedCount();
+			},
+			error: function(xhr) {
+				var msg = xhr.responseJSON && xhr.responseJSON.error
+					? xhr.responseJSON.error
+					: 'Bulk operation failed';
+				showNotice('error', msg);
+			},
+			complete: function() {
+				$('#tsm-apply-bulk').prop('disabled', false).text(tsmAdmin.apply || 'Apply');
 			}
 		});
 	}

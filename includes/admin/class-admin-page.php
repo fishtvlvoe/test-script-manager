@@ -159,6 +159,18 @@ class Admin_Page {
 				'confirmCancel'      => __( '確定要取消此執行嗎？', 'test-script-manager' ),
 				'executionCancelled' => __( '執行已取消。', 'test-script-manager' ),
 				'selectScriptFirst'  => __( '請先選擇腳本。', 'test-script-manager' ),
+				// Bulk operations localization strings.
+				'bulkEdit'           => __( '批量編輯', 'test-script-manager' ),
+				'exitBulkEdit'       => __( '退出批量編輯', 'test-script-manager' ),
+				'bulkActions'        => __( '批量操作', 'test-script-manager' ),
+				'delete'             => __( '刪除', 'test-script-manager' ),
+				'setCategory'        => __( '設定分類', 'test-script-manager' ),
+				'apply'              => __( '套用', 'test-script-manager' ),
+				'selected'           => __( '已選取', 'test-script-manager' ),
+				'confirmBulkDelete'  => __( '確定要刪除 %d 個腳本嗎？此操作無法復原。', 'test-script-manager' ),
+				'confirmBulkCategory' => __( '確定要為 %d 個腳本設定分類嗎？', 'test-script-manager' ),
+				'bulkSuccess'        => __( '成功：%d，失敗：%d', 'test-script-manager' ),
+				'selectAll'          => __( '全選', 'test-script-manager' ),
 			)
 		);
 	}
@@ -184,7 +196,28 @@ class Admin_Page {
 				<button type="button" class="page-title-action" id="tsm-new-script">
 					<?php esc_html_e( '新增腳本', 'test-script-manager' ); ?>
 				</button>
+				<button type="button" class="page-title-action" id="tsm-toggle-bulk-mode">
+					<?php esc_html_e( '批量編輯', 'test-script-manager' ); ?>
+				</button>
 			</h1>
+
+			<!-- Bulk actions bar (Phase 7, Plan 05) -->
+			<div class="tsm-bulk-actions" id="tsm-bulk-actions" style="display: none;">
+				<input type="checkbox" id="tsm-select-all" class="tsm-bulk-checkbox">
+				<label for="tsm-select-all"><?php esc_html_e( '全選', 'test-script-manager' ); ?></label>
+				<select id="tsm-bulk-action-select">
+					<option value=""><?php esc_html_e( '批量操作', 'test-script-manager' ); ?></option>
+					<option value="delete"><?php esc_html_e( '刪除', 'test-script-manager' ); ?></option>
+					<option value="set_category"><?php esc_html_e( '設定分類', 'test-script-manager' ); ?></option>
+				</select>
+				<select id="tsm-bulk-category-select" style="display: none;">
+					<!-- Populated by JS -->
+				</select>
+				<button type="button" class="button" id="tsm-apply-bulk" disabled>
+					<?php esc_html_e( '套用', 'test-script-manager' ); ?>
+				</button>
+				<span class="tsm-selected-count">0 <?php esc_html_e( '已選取', 'test-script-manager' ); ?></span>
+			</div>
 
 			<div class="tsm-container">
 				<!-- Sidebar -->
@@ -192,6 +225,13 @@ class Admin_Page {
 					<!-- Search box -->
 					<div class="tsm-search-box">
 						<input type="text" id="tsm-search" placeholder="<?php esc_attr_e( '搜尋腳本...', 'test-script-manager' ); ?>">
+					</div>
+
+					<!-- Category filter (Phase 7, Plan 04) -->
+					<div class="tsm-category-filter">
+						<select id="tsm-category-select">
+							<option value=""><?php esc_html_e( '所有分類', 'test-script-manager' ); ?></option>
+						</select>
 					</div>
 
 					<!-- Script list -->
@@ -245,6 +285,14 @@ class Admin_Page {
 							<button type="button" class="button" id="tsm-back-to-list">
 								<?php esc_html_e( '返回列表', 'test-script-manager' ); ?>
 							</button>
+						</div>
+
+						<!-- Category selector (Phase 7, Plan 04) -->
+						<div class="tsm-category-selector">
+							<label><?php esc_html_e( '分類', 'test-script-manager' ); ?></label>
+							<div class="tsm-category-checkboxes" id="tsm-category-checkboxes">
+								<span class="tsm-loading"><?php esc_html_e( '載入中...', 'test-script-manager' ); ?></span>
+							</div>
 						</div>
 
 						<div class="tsm-form-group">

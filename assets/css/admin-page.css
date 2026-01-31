@@ -28,6 +28,55 @@
 	width: 100%;
 }
 
+/* Category filter (Phase 7, Plan 04) */
+.tsm-category-filter {
+	padding: 10px 15px;
+	border-bottom: 1px solid #ddd;
+	background: #f9f9f9;
+}
+
+.tsm-category-filter select {
+	width: 100%;
+}
+
+/* Category selector in edit mode (Phase 7, Plan 04) */
+.tsm-category-selector {
+	margin-bottom: 20px;
+	padding: 15px;
+	background: #f9f9f9;
+	border: 1px solid #e0e0e0;
+	border-radius: 4px;
+}
+
+.tsm-category-selector > label {
+	display: block;
+	font-weight: 600;
+	margin-bottom: 10px;
+}
+
+.tsm-category-checkboxes {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 15px;
+}
+
+.tsm-category-checkbox {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	font-weight: normal;
+	cursor: pointer;
+}
+
+.tsm-category-checkbox input[type="checkbox"] {
+	margin: 0;
+}
+
+.tsm-no-categories {
+	color: #646970;
+	font-style: italic;
+}
+
 .tsm-script-list {
 	max-height: 600px;
 	overflow-y: auto;
@@ -588,4 +637,58 @@
 
 #tsm-diff-container .tsm-error {
 	color: #dc3232;
+}
+
+/* Phase 7, Plan 05: Bulk Operations Styles */
+.tsm-bulk-actions {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px 15px;
+	background: #f0f0f1;
+	border: 1px solid #c3c4c7;
+	margin-bottom: 15px;
+	border-radius: 4px;
+}
+
+.tsm-bulk-actions .tsm-bulk-checkbox {
+	margin: 0;
+}
+
+.tsm-bulk-actions label {
+	margin-right: 10px;
+	font-weight: 500;
+}
+
+.tsm-bulk-actions select {
+	min-width: 140px;
+}
+
+.tsm-selected-count {
+	color: #666;
+	font-style: italic;
+	margin-left: auto;
+}
+
+/* Script checkbox in bulk mode */
+.tsm-script-checkbox {
+	margin-right: 10px;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+/* Script item with checkbox layout */
+.tsm-script-item {
+	display: flex;
+	align-items: center;
+}
+
+.tsm-script-info {
+	flex: 1;
+	min-width: 0;
+}
+
+/* Toggle bulk mode button */
+#tsm-toggle-bulk-mode {
+	margin-left: 10px;
 }
