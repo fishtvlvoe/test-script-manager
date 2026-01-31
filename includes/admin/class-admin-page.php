@@ -196,6 +196,10 @@ class Admin_Page {
 				<button type="button" class="page-title-action" id="tsm-new-script">
 					<?php esc_html_e( '新增腳本', 'test-script-manager' ); ?>
 				</button>
+				<button type="button" class="page-title-action tsm-new-from-template" id="tsm-new-from-template">
+					<span class="dashicons dashicons-welcome-add-page"></span>
+					<?php esc_html_e( '從模板新增', 'test-script-manager' ); ?>
+				</button>
 				<button type="button" class="page-title-action" id="tsm-toggle-bulk-mode">
 					<?php esc_html_e( '批量編輯', 'test-script-manager' ); ?>
 				</button>
@@ -350,6 +354,21 @@ class Admin_Page {
 					<div class="tsm-welcome" id="tsm-welcome">
 						<h2><?php esc_html_e( '歡迎使用測試腳本管理', 'test-script-manager' ); ?></h2>
 						<p><?php esc_html_e( '從左側選擇腳本或建立新的腳本。', 'test-script-manager' ); ?></p>
+					</div>
+				</div>
+			</div>
+
+			<!-- Template selection modal (Phase 7, Plan 04) -->
+			<div class="tsm-template-modal-overlay" id="tsm-template-modal-overlay">
+				<div class="tsm-template-modal">
+					<div class="tsm-template-modal-header">
+						<h3><?php esc_html_e( '選擇模板', 'test-script-manager' ); ?></h3>
+						<button type="button" class="button tsm-template-modal-close" id="tsm-template-modal-close">
+							<span class="dashicons dashicons-no-alt"></span>
+						</button>
+					</div>
+					<div class="tsm-template-list" id="tsm-template-list">
+						<div class="tsm-loading"><?php esc_html_e( '載入中...', 'test-script-manager' ); ?></div>
 					</div>
 				</div>
 			</div>

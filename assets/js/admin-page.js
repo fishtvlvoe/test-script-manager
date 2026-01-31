@@ -107,6 +107,13 @@
 		// Category filter (Phase 7, Plan 04)
 		$('#tsm-category-select').on('change', filterByCategory);
 
+		// Template modal (Phase 7, Plan 04)
+		$('#tsm-new-from-template').on('click', openTemplateModal);
+		$('#tsm-template-modal-close').on('click', closeTemplateModal);
+		$('#tsm-template-modal-overlay').on('click', function(e) {
+			if (e.target === this) closeTemplateModal();
+		});
+
 		// Auto-generate slug from name
 		$('#tsm-script-name').on('keyup', function() {
 			const name = $(this).val();
@@ -260,6 +267,147 @@
 			},
 			error: function() {
 				console.error('TSM: Failed to filter by category');
+			}
+		});
+	}
+
+	// ========================================
+	// Phase 7, Plan 04: Template Functions
+	// ========================================
+
+	var templates = null; // Cache templates
+
+	/**
+	 * Open template selection modal (Phase 7, Plan 04).
+	 */
+	function openTemplateModal() {
+		$('#tsm-template-modal-overlay').addClass('active');
+		fetchTemplates();
+	}
+
+	/**
+	 * Close template selection modal (Phase 7, Plan 04).
+	 */
+	function closeTemplateModal() {
+		$('#tsm-template-modal-overlay').removeClass('active');
+	}
+
+	/**
+	 * Fetch templates from REST API (Phase 7, Plan 04).
+	 */
+	function fetchTemplates() {
+		var $list = $('#tsm-template-list');
+
+		// Use cache if available
+		if (templates !== null) {
+			renderTemplateList(templates);
+			return;
+		}
+
+		$list.html('<div class="tsm-loading">Loading templates...</div>');
+
+		$.ajax({
+			url: tsmAdmin.restUrl + '/templates',
+			method: 'GET',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			success: function(response) {
+				templates = response.templates || [];
+				renderTemplateList(templates);
+			},
+			error: function() {
+				$list.html('<div class="tsm-error">Failed to load templates.</div>');
+			}
+		});
+	}
+
+	/**
+	 * Render template list in modal (Phase 7, Plan 04).
+	 *
+	 * @param {Array} templateList Array of template objects.
+	 */
+	function renderTemplateList(templateList) {
+		var $list = $('#tsm-template-list');
+
+		if (templateList.length === 0) {
+			$list.html('<div class="tsm-no-templates">No templates available.</div>');
+			return;
+		}
+
+		var html = '';
+		templateList.forEach(function(template) {
+			html += '<div class="tsm-template-item" data-template-id="' + escapeHtml(template.id) + '">';
+			html += '<div class="tsm-template-info">';
+			html += '<h4>' + escapeHtml(template.name) + '</h4>';
+			html += '<p>' + escapeHtml(template.description) + '</p>';
+			html += '</div>';
+			html += '<button type="button" class="button button-primary tsm-use-template">';
+			html += '使用此模板';
+			html += '</button>';
+			html += '</div>';
+		});
+
+		$list.html(html);
+
+		// Bind click handlers
+		$list.find('.tsm-use-template').on('click', function() {
+			var templateId = $(this).closest('.tsm-template-item').data('template-id');
+			createFromTemplate(templateId);
+		});
+	}
+
+	/**
+	 * Create a new script from template (Phase 7, Plan 04).
+	 *
+	 * @param {string} templateId Template ID.
+	 */
+	function createFromTemplate(templateId) {
+		var scriptName = prompt('請輸入腳本名稱:');
+		if (!scriptName || !scriptName.trim()) {
+			return;
+		}
+
+		scriptName = scriptName.trim();
+		var $btn = $('.tsm-template-item[data-template-id="' + templateId + '"] .tsm-use-template');
+		$btn.prop('disabled', true).text('Creating...');
+
+		$.ajax({
+			url: tsmAdmin.restUrl + '/templates/' + templateId + '/create',
+			method: 'POST',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-WP-Nonce', tsmAdmin.nonce);
+			},
+			contentType: 'application/json',
+			data: JSON.stringify({
+				name: scriptName
+			}),
+			success: function(response) {
+				if (response.success && response.script) {
+					// Close modal
+					closeTemplateModal();
+
+					// Reload script list
+					loadScripts();
+
+					// Open the new script in edit mode after brief delay
+					setTimeout(function() {
+						openEditMode(response.script.id);
+					}, 500);
+
+					showNotice('success', 'Script created from template: ' + scriptName);
+				} else {
+					showNotice('error', response.error || 'Failed to create script from template');
+				}
+			},
+			error: function(xhr) {
+				var msg = xhr.responseJSON && xhr.responseJSON.error
+					? xhr.responseJSON.error
+					: 'Failed to create script from template';
+				showNotice('error', msg);
+			},
+			complete: function() {
+				$btn.prop('disabled', false).text('使用此模板');
 			}
 		});
 	}
