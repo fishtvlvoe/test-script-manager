@@ -93,12 +93,18 @@ class Plugin {
 		// Settings service (Phase 7, Plan 02).
 		require_once TSM_PLUGIN_DIR . 'includes/services/class-settings-service.php';
 
-		// API endpoints (Phase 2, Plan 02 + Phase 4, Plan 02 + Phase 5, Plan 02 + Phase 6, Plan 02 + Phase 7, Plan 01).
+		// Category and Template services (Phase 7, Plan 03).
+		require_once TSM_PLUGIN_DIR . 'includes/services/class-category-service.php';
+		require_once TSM_PLUGIN_DIR . 'includes/services/class-template-service.php';
+
+		// API endpoints (Phase 2, Plan 02 + Phase 4, Plan 02 + Phase 5, Plan 02 + Phase 6, Plan 02 + Phase 7, Plan 01 + Plan 03).
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-scripts-api.php';
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-execution-api.php';
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-background-api.php';
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-versions-api.php';
 		require_once TSM_PLUGIN_DIR . 'includes/api/class-export-api.php';
+		require_once TSM_PLUGIN_DIR . 'includes/api/class-categories-api.php';
+		require_once TSM_PLUGIN_DIR . 'includes/api/class-templates-api.php';
 
 		// Admin pages (Phase 1, Plan 02 + Phase 4, Plan 03 + Phase 7, Plan 02).
 		require_once TSM_PLUGIN_DIR . 'includes/admin/class-admin-page.php';
@@ -129,6 +135,12 @@ class Plugin {
 
 		$export_api = new API\Export_API();
 		add_action( 'rest_api_init', array( $export_api, 'register_routes' ) );
+
+		$categories_api = new API\Categories_API();
+		add_action( 'rest_api_init', array( $categories_api, 'register_routes' ) );
+
+		$templates_api = new API\Templates_API();
+		add_action( 'rest_api_init', array( $templates_api, 'register_routes' ) );
 
 		// Initialize admin pages (only in admin context).
 		if ( is_admin() ) {
