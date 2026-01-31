@@ -3,7 +3,7 @@
  * Plugin Name: Test Script Manager
  * Plugin URI: https://github.com/fishtvlvoe/test-script-manager
  * Description: WordPress 後台測試腳本管理工具，讓開發者可以直接在後台編寫、管理、執行測試腳本。
- * Version: 1.0.1
+ * Version: 0.1.0
  * Author: Fish TV
  * Author URI: https://test.buygo.me
  * License: GPL v2 or later
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Plugin version.
  */
-define( 'TSM_VERSION', '1.0.1' );
+define( 'TSM_VERSION', '0.1.0' );
 
 /**
  * Plugin directory path.
