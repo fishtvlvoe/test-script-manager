@@ -1,0 +1,38 @@
+{
+  "db-query": {
+    "name": "Database Query",
+    "description": "Execute a WordPress database query and display results",
+    "language": "php",
+    "code": "<?php\nglobal $wpdb;\n\n// Example: Get recent posts\n$results = $wpdb->get_results(\n    \"SELECT ID, post_title, post_date FROM {$wpdb->posts} WHERE post_status = 'publish' ORDER BY post_date DESC LIMIT 10\"\n);\n\nTSM\\Services\\OutputFormatter::format_as_table($results);"
+  },
+  "user-list": {
+    "name": "List Users",
+    "description": "Get and display WordPress users",
+    "language": "php",
+    "code": "<?php\n$users = get_users(array(\n    'number' => 20,\n    'orderby' => 'registered',\n    'order' => 'DESC'\n));\n\n$data = array_map(function($user) {\n    return array(\n        'ID' => $user->ID,\n        'username' => $user->user_login,\n        'email' => $user->user_email,\n        'display_name' => $user->display_name,\n        'registered' => $user->user_registered\n    );\n}, $users);\n\nTSM\\Services\\OutputFormatter::format_as_table($data);"
+  },
+  "option-get": {
+    "name": "Get Option",
+    "description": "Retrieve and display a WordPress option value",
+    "language": "php",
+    "code": "<?php\n// Change 'option_name' to the option you want to check\n$option_name = 'siteurl';\n$value = get_option($option_name);\n\necho \"Option: {$option_name}\\n\";\necho \"Value: \";\nprint_r($value);"
+  },
+  "transient-check": {
+    "name": "Check Transient",
+    "description": "Check transient value and expiration",
+    "language": "php",
+    "code": "<?php\n$transient_name = 'your_transient_name';\n\n$value = get_transient($transient_name);\n\nif ($value === false) {\n    echo \"Transient '{$transient_name}' not found or expired.\";\n} else {\n    echo \"Transient: {$transient_name}\\n\";\n    echo \"Value: \";\n    print_r($value);\n}"
+  },
+  "post-meta": {
+    "name": "Get Post Meta",
+    "description": "Retrieve all meta data for a specific post",
+    "language": "php",
+    "code": "<?php\n$post_id = 1; // Change to your post ID\n\n$meta = get_post_meta($post_id);\n\necho \"Post ID: {$post_id}\\n\";\necho \"Meta count: \" . count($meta) . \"\\n\\n\";\n\nforeach ($meta as $key => $values) {\n    echo \"{$key}: \";\n    print_r($values);\n    echo \"\\n\";\n}"
+  },
+  "api-request": {
+    "name": "External API Request",
+    "description": "Make an HTTP request to external API",
+    "language": "php",
+    "code": "<?php\n$url = 'https://jsonplaceholder.typicode.com/posts/1';\n\n$response = wp_remote_get($url);\n\nif (is_wp_error($response)) {\n    echo \"Error: \" . $response->get_error_message();\n} else {\n    $body = wp_remote_retrieve_body($response);\n    $data = json_decode($body, true);\n    \n    echo \"Status: \" . wp_remote_retrieve_response_code($response) . \"\\n\\n\";\n    print_r($data);\n}"
+  }
+}
