@@ -27,7 +27,7 @@ class GitHub_Updater {
 	 *
 	 * @var string
 	 */
-	private $github_user = 'fishtv';
+	private $github_user = 'fishtvlvoe';
 
 	/**
 	 * GitHub repository name.
