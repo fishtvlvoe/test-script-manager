@@ -107,6 +107,9 @@ Recent decisions affecting current work:
 | Static service methods for CategoryService | 07-03 | Consistent with existing service classes |
 | JSON file for templates | 07-03 | Easy to edit, version control friendly |
 | Template ID as JSON key | 07-03 | Simple lookup, human-readable |
+| Auto-save categories on checkbox change | 07-04 | Immediate feedback, no need for separate save button |
+| Cache templates in JS variable | 07-04 | Avoid repeated API calls when reopening modal |
+| Prompt for script name when using template | 07-04 | Simple UX, avoid complex modal forms |
 | Bulk mode toggle button | 07-05 | Keep UI clean when not bulk editing |
 | Confirmation for bulk actions | 07-05 | Prevent accidental bulk delete/categorize |
 | Row click toggles checkbox in bulk mode | 07-05 | Convenient selection without precise clicking |
