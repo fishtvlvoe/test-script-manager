@@ -5,7 +5,7 @@
 See: .planning/PROJECT.md (updated 2026-01-30)
 
 **Core value:** 讓開發者能在 WordPress 後台一鍵編寫並執行測試腳本，立即看到格式化的結果，無需離開瀏覽器或處理檔案路徑問題
-**Current focus:** Phase 7 - Output Enhancements & Polish (COMPLETE)
+**Current focus:** ✅ v1.0 Feature Complete - Milestone Archived
 
 ## Current Position
 
